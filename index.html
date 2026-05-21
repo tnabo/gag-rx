@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GagRx Labs™ — Candy That Thinks It's Medicine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdfaf3;
+    --bg-soft: #f5f0e3;
+    --ink: #1a1a1a;
+    --ink-soft: #555;
+    --muted: #888;
+    --line: #e8e2d0;
+    --accent: #ff4d6d;
+    --accent-soft: #ffe0e6;
+    --yellow: #ffd60a;
+    --mint: #b8e6d9;
+    --sky: #d4e7f7;
+    --peach: #ffd4b8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  /* CURSOR DOT */
+  .cursor-dot {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--ink);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+    display: none;
+  }
+  @media (hover: hover) {
+    .cursor-dot { display: block; }
+  }
+  .cursor-dot.hover {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+  }
+
+  /* ANNOUNCE */
+  .announce {
+    background: var(--ink);
+    color: var(--bg);
+    text-align: center;
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .announce span { color: var(--yellow); font-weight: 600; }
+
+  /* NAV */
+  nav {
+    background: rgba(253, 250, 243, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .logo:hover { opacity: 0.75; }
+  .logo img {
+    height: 42px;
+    width: auto;
+    display: block;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 0.3rem 0;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .cart-btn {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .cart-btn:hover { background: var(--accent); transform: scale(1.05); }
+  .cart-count {
+    background: var(--accent);
+    color: white;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0 0.4rem;
+  }
+  .cart-btn:hover .cart-count { background: white; color: var(--ink); }
+  .cart-count.bump { animation: bump 0.4s ease; }
+  @keyframes bump {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+  }
+
+  /* HERO */
+  .hero {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 5rem 2rem 4rem;
+  }
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-bottom: 1.8rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+  }
+  .hero h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 .italic {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .hero p.lead {
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 2.5rem;
+    max-width: 480px;
+  }
+  .hero-buttons { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+  .btn {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 1rem 1.8rem;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.25s;
+  }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+  .btn-primary .arrow { transition: transform 0.25s; }
+  .btn-primary:hover .arrow { transform: translateX(4px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+  /* HERO STAGE */
+  .hero-stage {
+    position: relative;
+    height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-product-card {
+    position: absolute;
+    width: 75%;
+    aspect-ratio: 1;
+    border-radius: 32px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s;
+    cursor: pointer;
+  }
+  .hero-product-card img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.12));
+  }
+  .hero-product-card.bg-pink { background: var(--accent-soft); }
+  .hero-product-card.bg-yellow { background: #fff4b8; }
+  .hero-product-card.bg-mint { background: var(--mint); }
+  .hero-product-card[data-pos="back"] {
+    transform: translate(-22%, 0) rotate(-6deg) scale(0.85);
+    opacity: 0.65;
+    z-index: 1;
+  }
+  .hero-product-card[data-pos="front"] {
+    transform: translate(0, 0) rotate(0) scale(1);
+    z-index: 3;
+  }
+  .hero-product-card[data-pos="back-right"] {
+    transform: translate(22%, 0) rotate(6deg) scale(0.85);
+    opacity: 0.65;
+    z-index: 2;
+  }
+  .hero-nav {
+    position: absolute;
+    bottom: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+  }
+  .hero-dot {
+    width: 32px;
+    height: 4px;
+    background: var(--line);
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0;
+  }
+  .hero-dot.active { background: var(--ink); width: 48px; }
+
+  .hero-tag {
+    position: absolute;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    z-index: 5;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+  }
+  .hero-tag-1 {
+    top: 8%;
+    right: 5%;
+    background: var(--yellow);
+    color: var(--ink);
+    transform: rotate(6deg);
+  }
+  .hero-tag-2 {
+    bottom: 12%;
+    left: 0;
+    background: var(--accent);
+    color: white;
+    transform: rotate(-4deg);
+  }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    max-width: 1300px;
+    margin: 2rem auto 0;
+  }
+  .stat {
+    padding: 2rem;
+    text-align: center;
+    border-right: 1px solid var(--line);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    display: block;
+  }
+  .stat-num em { color: var(--accent); font-style: italic; font-weight: 500; }
+  .stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+
+  /* SECTION */
+  .section {
+    padding: 7rem 2rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .section-head {
+    margin-bottom: 3.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .section-head h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    max-width: 600px;
+  }
+  .section-head h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .section-head .sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 320px;
+  }
+
+  /* CAROUSEL */
+  .carousel {
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    margin: 0 -2rem;
+    padding: 1rem 2rem 2rem;
+  }
+  .carousel.dragging { cursor: grabbing; }
+  .carousel-track {
+    display: flex;
+    gap: 1.5rem;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .carousel.dragging .carousel-track { transition: none; }
+
+  .product-card {
+    flex: 0 0 320px;
+    background: var(--bg-soft);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: transform 0.4s, box-shadow 0.4s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  }
+  .product-card.tone-pink { background: var(--accent-soft); }
+  .product-card.tone-yellow { background: #fff4b8; }
+  .product-card.tone-mint { background: var(--mint); }
+  .product-card.tone-sky { background: var(--sky); }
+  .product-card.tone-peach { background: var(--peach); }
+
+  .product-img {
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.12));
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+  .product-card:hover .product-img img {
+    transform: scale(1.08) rotate(-3deg);
+  }
+  .product-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--ink);
+    color: white;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .product-badge.accent { background: var(--accent); }
+  .product-info {
+    padding: 1.5rem;
+    background: white;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-cat {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .product-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .product-desc {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+    flex: 1;
+  }
+  .product-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .product-price {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .product-add {
+    background: var(--ink);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+  }
+  .product-add:hover { background: var(--accent); transform: rotate(90deg) scale(1.1); }
+  .product-add.added { background: #2da44e; transform: scale(1.15); }
+
+  .carousel-controls { display: flex; gap: 0.5rem; }
+  .car-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+  }
+  .car-btn:hover:not(:disabled) {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+    transform: scale(1.05);
+  }
+  .car-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* KIT */
+  .kit-feature {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 7rem 2rem;
+    margin: 4rem 0;
+    overflow: hidden;
+  }
+  .kit-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .kit-text .eyebrow {
+    background: rgba(255,255,255,0.08);
+    color: var(--yellow);
+    border-color: rgba(255,255,255,0.1);
+  }
+  .kit-text h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .kit-text h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .kit-text p {
+    color: #bbb;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 460px;
+  }
+  .kit-features { list-style: none; margin-bottom: 2.5rem; }
+  .kit-features li {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.95rem;
+    color: #ddd;
+  }
+  .kit-features li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .kit-price {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .kit-price .now {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .kit-price .was { text-decoration: line-through; color: var(--muted); font-size: 1.2rem; }
+  .kit-price .save {
+    background: var(--accent);
+    color: white;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .kit-cta {
+    background: var(--bg);
+    color: var(--ink);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: inherit;
+  }
+  .kit-cta:hover { background: var(--accent); color: white; transform: translateY(-2px); }
+  .kit-visual { position: relative; height: 540px; }
+  .kit-photo {
+    position: absolute;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    background: white;
+  }
+  .kit-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .kit-photo-1 {
+    width: 65%; height: 75%; top: 0; left: 0;
+    transform: rotate(-4deg);
+    z-index: 2;
+  }
+  .kit-photo-2 {
+    width: 50%; height: 55%; bottom: 0; right: 0;
+    transform: rotate(5deg);
+    z-index: 3;
+  }
+  .kit-visual:hover .kit-photo-1 { transform: rotate(-6deg) translate(-10px, -10px); }
+  .kit-visual:hover .kit-photo-2 { transform: rotate(7deg) translate(10px, 10px); }
+
+  /* STEPS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  .step {
+    padding: 2.5rem 2rem;
+    background: var(--bg-soft);
+    border-radius: 24px;
+    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+  }
+  .step:hover {
+    transform: translateY(-6px);
+    background: white;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+  }
+  .step-num {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+  .step h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+  .step p { color: var(--ink-soft); line-height: 1.55; font-size: 0.95rem; }
+
+  /* REVIEWS */
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .review {
+    background: var(--bg-soft);
+    padding: 2rem;
+    border-radius: 24px;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .review::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .review:hover {
+    background: white;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+    transform: translateY(-4px);
+  }
+  .review:hover::before { transform: scaleX(1); }
+  .review-stars { color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; font-size: 0.9rem; }
+  .review-text { font-size: 1.05rem; line-height: 1.55; margin-bottom: 1.5rem; }
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+  }
+  .review-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .review-name { font-weight: 600; font-size: 0.9rem; }
+  .review-role { font-size: 0.8rem; color: var(--muted); }
+
+  /* FAQ */
+  .faq-wrap { max-width: 800px; margin: 3rem auto 0; }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-q {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 1.5rem 0;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: inherit;
+    transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-q .plus {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bg-soft);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+  .faq-item.open .faq-q .plus {
+    background: var(--accent);
+    color: white;
+    transform: rotate(45deg);
+  }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .faq-a-inner { padding: 0 0 1.5rem; max-width: 90%; }
+  .faq-item.open .faq-a { max-height: 200px; }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: var(--accent);
+    color: white;
+    padding: 7rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before, .final-cta::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .final-cta::before { width: 400px; height: 400px; top: -100px; left: -100px; }
+  .final-cta::after { width: 300px; height: 300px; bottom: -80px; right: -80px; }
+  .cta-inner { max-width: 700px; margin: 0 auto; position: relative; }
+  .final-cta h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .final-cta h2 em { font-style: italic; font-weight: 500; color: var(--yellow); }
+  .final-cta p { font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.92; }
+  .cta-form {
+    display: flex;
+    gap: 0.4rem;
+    max-width: 480px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 999px;
+    padding: 0.4rem;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  }
+  .cta-form input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.9rem 1.3rem;
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+    color: var(--ink);
+  }
+  .cta-form button {
+    background: var(--ink);
+    color: white;
+    border: none;
+    padding: 0.9rem 1.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .cta-form button:hover { background: var(--yellow); color: var(--ink); }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: var(--bg); padding: 4rem 2rem 2rem; }
+  .footer-grid {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid #333;
+  }
+  .footer-brand {
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .footer-brand img {
+    height: 48px;
+    width: auto;
+    /* Logo has dark navy text — invert it so it reads on dark footer */
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+  }
+  .footer-desc { color: #999; line-height: 1.6; margin-bottom: 1.5rem; max-width: 320px; }
+  .footer-addr { font-size: 0.85rem; color: #777; line-height: 1.7; }
+  .footer-col h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--yellow);
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 0.8rem; font-size: 0.95rem; }
+  .footer-col a { color: #bbb; text-decoration: none; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    font-size: 0.8rem;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  /* CART DRAWER */
+  .cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 420px;
+    max-width: 100vw;
+    height: 100vh;
+    background: var(--bg);
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -20px 0 60px rgba(0,0,0,0.15);
+  }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 150;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: auto; }
+  .cart-head {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cart-head h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .cart-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--ink);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+  .cart-close:hover { background: var(--bg-soft); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+  .cart-empty { text-align: center; padding: 4rem 1rem; color: var(--muted); }
+  .cart-empty p { margin-top: 1rem; }
+  .cart-empty .emoji { font-size: 3rem; }
+  .cart-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  .cart-item-img {
+    width: 70px; height: 70px;
+    background: var(--bg-soft);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .cart-item-img img { max-width: 80%; max-height: 80%; object-fit: contain; }
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .cart-item-price { color: var(--muted); font-size: 0.85rem; }
+  .cart-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--bg-soft);
+    border-radius: 999px;
+    padding: 0.2rem;
+    margin-top: 0.5rem;
+  }
+  .cart-qty button {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+    transition: background 0.15s;
+  }
+  .cart-qty button:hover { background: white; }
+  .cart-qty span {
+    min-width: 22px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .cart-foot {
+    padding: 1.5rem;
+    border-top: 1px solid var(--line);
+    background: var(--bg-soft);
+  }
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+  }
+  .cart-total-label { color: var(--muted); font-size: 0.9rem; }
+  .cart-total-amount {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .cart-checkout {
+    width: 100%;
+    background: var(--ink);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .cart-checkout:hover { background: var(--accent); }
+  .cart-checkout:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--ink);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    z-index: 300;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast .check {
+    background: #2da44e;
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hero { padding: 3rem 1.5rem; }
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-stage { height: 400px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+    .section { padding: 4rem 1.5rem; }
+    .kit-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .kit-feature { padding: 4rem 1.5rem; }
+    .kit-visual { height: 400px; }
+    .steps { grid-template-columns: 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .cart-drawer { width: 100vw; }
+  }
+  @media (max-width: 500px) {
+    .logo img { height: 34px; }
+    .product-card { flex: 0 0 280px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .cta-form { flex-direction: column; border-radius: 16px; padding: 0.8rem; gap: 0.5rem; }
+    .cta-form button { padding: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor"></div>
+
+<div class="announce">
+  ✨ Free shipping over <span>$35</span> · Not real medicine, definitely real candy
+</div>
+
+<nav>
+  <a href="#" class="logo"><img src="images/logo.png" alt="GagRx Labs — Novelty Candy"></a>
+  <ul class="nav-links">
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#kits">Gift Kits</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <button class="cart-btn" id="openCart">
+    Cart <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Officially unofficial · est. whenever</div>
+      <h1>Candy that thinks it's <span class="italic">medicine.</span></h1>
+      <p class="lead">The gag gift you'll buy this year. Real candy, packaged as fake pharmaceuticals, for problems your insurance refuses to acknowledge.</p>
+      <div class="hero-buttons">
+        <a href="#shop" class="btn btn-primary">Shop the pharmacy <span class="arrow">→</span></a>
+        <a href="#kits" class="btn btn-ghost">See gift kits</a>
+      </div>
+    </div>
+    <div class="hero-stage" id="heroStage">
+      <div class="hero-tag hero-tag-1">not medicine!</div>
+      <div class="hero-tag hero-tag-2">actually candy 🍬</div>
+      <div class="hero-product-card bg-pink" data-pos="back" data-idx="0">
+        <img src="images/shartismol.png" alt="Shartismol" />
+      </div>
+      <div class="hero-product-card bg-yellow" data-pos="front" data-idx="1">
+        <img src="images/meetingrofen.png" alt="Meetingrofen" />
+      </div>
+      <div class="hero-product-card bg-mint" data-pos="back-right" data-idx="2">
+        <img src="images/distillaxine.png" alt="Distillaxine" />
+      </div>
+      <div class="hero-nav">
+        <button class="hero-dot" data-idx="0" aria-label="Show 1"></button>
+        <button class="hero-dot active" data-idx="1" aria-label="Show 2"></button>
+        <button class="hero-dot" data-idx="2" aria-label="Show 3"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="shop">
+  <div class="section-head reveal">
+    <h2>The <em>formulary.</em></h2>
+    <div style="display:flex; align-items: flex-end; gap: 2rem; flex-wrap: wrap;">
+      <p class="sub">Five flagship products. Real candy. Comically committed packaging. Drag to browse →</p>
+      <div class="carousel-controls">
+        <button class="car-btn" id="prevBtn" aria-label="Previous">←</button>
+        <button class="car-btn" id="nextBtn" aria-label="Next">→</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel" id="carousel">
+    <div class="carousel-track" id="track">
+
+      <div class="product-card tone-pink">
+        <div class="product-img">
+          <span class="product-badge accent">#1 Bestseller</span>
+          <img src="images/shartismol.png" alt="Shartismol" />
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Gastrointestinal Anxiety</div>
+          <h3 class="product-name">Shartismol®</h3>
+          <p class="product-desc">When you're only 60% sure it's just gas. 50 cinnamon beans.</p>
+          <div class="product-foot">
+            <div class="product-price">$14</div>
+            <button class="product-add" data-name="Shartismol" data-price="14" data-img="images/shartismol.png">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card tone-sky">
+        <div class="product-img">
+          <span class="product-badge">New</span>
+          <img src="images/meetingrofen.png" alt="Meetingrofen" />
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Calendar Decongestant</div>
+          <h3 class="product-name">Meetingrofen™</h3>
+          <p class="product-desc">For meetings that should've been emails. 50 coated pieces.</p>
+          <div class="product-foot">
+            <div class="product-price">$16</div>
+            <button class="product-add" data-name="Meetingrofen" data-price="16" data-img="images/meetingrofen.png">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card tone-yellow">
+        <div class="product-img">
+          <img src="images/distillaxine.png" alt="Distillaxine" />
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Emotional Decompression</div>
+          <h3 class="product-name">Distillaxine™</h3>
+          <p class="product-desc">For symptoms of being conscious. 50mL shot glass.</p>
+          <div class="product-foot">
+            <div class="product-price">$12</div>
+            <button class="product-add" data-name="Distillaxine" data-price="12" data-img="images/distillaxine.png">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card tone-mint">
+        <div class="product-img">
+          <span class="product-badge accent">Wild</span>
+          <img src="images/cinnaplasma.png" alt="Cinnaplasma" />
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Emergency Sugar Infusion</div>
+          <h3 class="product-name">Cinnaplasma™</h3>
+          <p class="product-desc">Type FUN+. For acute candy emergencies. 30mL syringe.</p>
+          <div class="product-foot">
+            <div class="product-price">$11</div>
+            <button class="product-add" data-name="Cinnaplasma" data-price="11" data-img="images/cinnaplasma.png">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card tone-peach">
+        <div class="product-img">
+          <span class="product-badge">Bundle</span>
+          <img src="images/kit-tin.png" alt="Get Well Kit" />
+        </div>
+        <div class="product-info">
+          <div class="product-cat">The Full Experience</div>
+          <h3 class="product-name">Get Well Kit</h3>
+          <p class="product-desc">All four flagship products + bandages in a real first-aid tin.</p>
+          <div class="product-foot">
+            <div class="product-price">$48</div>
+            <button class="product-add" data-name="Get Well Kit" data-price="48" data-img="images/kit-tin.png">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="kit-feature" id="kits">
+  <div class="kit-inner">
+    <div class="kit-text reveal">
+      <div class="hero-eyebrow eyebrow">🎁 The bundle</div>
+      <h2>The whole<br><em>pharmacy.</em><br>One tin.</h2>
+      <p>Our flagship gift. Every product, plus the "Boo-Boo-Hoo" feelings bandages, packed in a real first-aid tin. The thing to send when a friend's had a long week — or a long year.</p>
+      <ul class="kit-features">
+        <li>One of every flagship product</li>
+        <li>"Boo-Boo-Hoo" feelings bandages</li>
+        <li>Custom prescription card</li>
+        <li>Real first-aid tin (keep forever)</li>
+      </ul>
+      <div class="kit-price">
+        <span class="now">$48</span>
+        <span class="was">$55</span>
+        <span class="save">Save $7</span>
+      </div>
+      <button class="kit-cta" data-name="Get Well Kit" data-price="48" data-img="images/kit-tin.png">
+        Add the kit to cart →
+      </button>
+    </div>
+    <div class="kit-visual">
+      <div class="kit-photo kit-photo-1">
+        <img src="images/kit-1.png" alt="Get Well Kit contents" />
+      </div>
+      <div class="kit-photo kit-photo-2">
+        <img src="images/kit-tin.png" alt="Get Well Kit tin" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="section-head reveal">
+    <h2>How it <em>works.</em></h2>
+    <p class="sub">Three steps. Twenty minutes of your time. One coworker's life: changed.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <h3>Pick a prescription</h3>
+      <p>Browse the formulary. Add one product, or grab the full kit. Nothing here will actually cure anything.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <h3>Ship to a victim</h3>
+      <p>Coworker, sibling, parent, or that one friend who needs a laugh. We won't tell them you laughed first.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <h3>Wait for the text</h3>
+      <p>Within 24 hours of opening, expect a "WTF?!" message. That's how you know it worked.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="reviews">
+  <div class="section-head reveal">
+    <h2>Early <em>reactions.</em></h2>
+    <p class="sub">From the friends and family who got the first boxes.</p>
+  </div>
+  <div class="reviews-grid">
+    <div class="review reveal">
+      <p class="review-text">Sent the Meetingrofen to my manager. She kept the bottle on her desk. My standup got cancelled the next week. Coincidence?</p>
+      <div class="review-author">
+        <div class="review-avatar">DK</div>
+        <div><div class="review-name">Dana K.</div><div class="review-role">Software Engineer</div></div>
+      </div>
+    </div>
+    <div class="review reveal">
+      <p class="review-text">My dad turned 65 and refused to acknowledge it. The Get Well Kit broke him. He's now wearing the "Told to Calm Down" bandage in his profile pic.</p>
+      <div class="review-author">
+        <div class="review-avatar">MT</div>
+        <div><div class="review-name">Marcus T.</div><div class="review-role">Reformed Gift-Giver</div></div>
+      </div>
+    </div>
+    <div class="review reveal">
+      <p class="review-text">Bought the Distillaxine shot glass for my sister's bachelorette. Best gift of the night. Worst gift to read in front of her future mother-in-law.</p>
+      <div class="review-author">
+        <div class="review-avatar">PR</div>
+        <div><div class="review-name">Priya R.</div><div class="review-role">Maid of Honor (Demoted)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="section-head reveal" style="justify-content: center; text-align: center;">
+    <div>
+      <h2>Common <em>questions.</em></h2>
+      <p class="sub" style="margin: 1rem auto 0;">The things people ask before they buy.</p>
+    </div>
+  </div>
+  <div class="faq-wrap">
+    <div class="faq-item">
+      <button class="faq-q">Is this actually candy?<span class="plus">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Yes. Every product contains real, edible candy — cinnamon beans, mints, sugar pieces. The packaging is the joke. The candy is real.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">How fast does it ship?<span class="plus">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Standard shipping in 2–5 business days. Free over $35. Most orders ship the next business day from Maple Valley, WA.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Can I send this directly as a gift?<span class="plus">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Absolutely. Add a recipient address at checkout, write a custom note (or let us pick one — we're funnier), and we'll ship directly. No receipt or pricing included.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Are the ingredients safe for allergies?<span class="plus">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Full ingredient lists are on every product page and on the actual packaging. Products may contain wheat, soy, dairy, or be produced in shared facilities. Always check labels.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Do you do wholesale?<span class="plus">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">We do. Email wholesale@gagrxlabs.com with your store info and we'll send the catalog and minimums.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="cta-inner">
+    <h2>Get <em>10% off</em> your first dose.</h2>
+    <p>Drop your email. We'll send a code and one bad joke.</p>
+    <form class="cta-form" onsubmit="event.preventDefault(); const b = this.querySelector('button'); b.textContent='✓ Filled'; b.style.background='#2da44e'; b.style.color='white';">
+      <input type="email" placeholder="your.email@notadoctor.com" required>
+      <button type="submit">Prescribe me</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="images/logo.png" alt="GagRx Labs"></div>
+      <p class="footer-desc">Candy that thinks it's medicine. Made in Maple Valley, distributed to anyone with a sense of humor.</p>
+      <div class="footer-addr">GagRx Labs Co.<br>Maple Valley, WA 98038<br>hello@gagrxlabs.com</div>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">All products</a></li>
+        <li><a href="#">Gift kits</a></li>
+        <li><a href="#">Bestsellers</a></li>
+        <li><a href="#">Wholesale</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Affiliates</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 GagRx Labs Co. · Not real medicine</div>
+    <div>Designed in Maple Valley, WA</div>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>Your prescription</h3>
+    <button class="cart-close" id="closeCart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <div class="emoji">💊</div>
+      <p>No prescriptions yet.<br>Add something to feel something.</p>
+    </div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-total">
+      <span class="cart-total-label">Subtotal</span>
+      <span class="cart-total-amount" id="cartTotal">$0</span>
+    </div>
+    <button class="cart-checkout" id="checkoutBtn" disabled>Checkout (demo)</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast">
+  <span class="check">✓</span>
+  <span id="toastText">Added to cart</span>
+</div>
+
+<script>
+  // CURSOR DOT
+  const cursor = document.getElementById('cursor');
+  if (window.matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .hero-product-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+  }
+
+  // HERO ROTATING CARDS
+  const heroCards = document.querySelectorAll('.hero-product-card');
+  const heroDots = document.querySelectorAll('.hero-dot');
+  let heroIdx = 1;
+  let heroTimer;
+
+  function setHero(idx) {
+    heroIdx = idx;
+    const positions = ['back', 'front', 'back-right'];
+    heroCards.forEach((card, i) => {
+      const offset = (i - idx + heroCards.length) % heroCards.length;
+      card.dataset.pos = positions[offset];
+    });
+    heroDots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+  }
+  function startHeroTimer() {
+    clearInterval(heroTimer);
+    heroTimer = setInterval(() => setHero((heroIdx + 1) % heroCards.length), 4500);
+  }
+  heroDots.forEach((dot, i) => {
+    dot.addEventListener('click', () => { setHero(i); startHeroTimer(); });
+  });
+  heroCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      setHero(parseInt(card.dataset.idx));
+      startHeroTimer();
+    });
+  });
+  startHeroTimer();
+
+  // DRAGGABLE CAROUSEL
+  const carousel = document.getElementById('carousel');
+  const track = document.getElementById('track');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  let pos = 0;
+  let isDown = false;
+  let startX = 0;
+  let scrollStart = 0;
+
+  function applyTransform() { track.style.transform = `translateX(${pos}px)`; }
+  function getMaxScroll() { return track.scrollWidth - carousel.clientWidth + 32; }
+  function clampPos() {
+    const max = getMaxScroll();
+    if (pos > 0) pos = 0;
+    if (pos < -max) pos = -max;
+  }
+  function updateButtons() {
+    prevBtn.disabled = pos >= 0;
+    nextBtn.disabled = pos <= -getMaxScroll();
+  }
+
+  prevBtn.addEventListener('click', () => { pos += 340; clampPos(); applyTransform(); updateButtons(); });
+  nextBtn.addEventListener('click', () => { pos -= 340; clampPos(); applyTransform(); updateButtons(); });
+
+  carousel.addEventListener('mousedown', (e) => {
+    if (e.target.closest('button')) return;
+    isDown = true;
+    carousel.classList.add('dragging');
+    startX = e.clientX;
+    scrollStart = pos;
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    pos = scrollStart + (e.clientX - startX);
+    clampPos();
+    applyTransform();
+  });
+  document.addEventListener('mouseup', () => {
+    if (!isDown) return;
+    isDown = false;
+    carousel.classList.remove('dragging');
+    updateButtons();
+  });
+  carousel.addEventListener('touchstart', (e) => {
+    isDown = true;
+    startX = e.touches[0].clientX;
+    scrollStart = pos;
+  }, { passive: true });
+  carousel.addEventListener('touchmove', (e) => {
+    if (!isDown) return;
+    pos = scrollStart + (e.touches[0].clientX - startX);
+    clampPos();
+    applyTransform();
+  }, { passive: true });
+  carousel.addEventListener('touchend', () => { isDown = false; updateButtons(); });
+  window.addEventListener('resize', () => { clampPos(); applyTransform(); updateButtons(); });
+  updateButtons();
+
+  // CART
+  const cart = [];
+  const cartCount = document.getElementById('cartCount');
+  const cartItems = document.getElementById('cartItems');
+  const cartTotal = document.getElementById('cartTotal');
+  const cartDrawer = document.getElementById('cartDrawer');
+  const cartOverlay = document.getElementById('cartOverlay');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+
+  function showToast(text) {
+    toastText.textContent = text;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function renderCart() {
+    if (cart.length === 0) {
+      cartItems.innerHTML = `<div class="cart-empty"><div class="emoji">💊</div><p>No prescriptions yet.<br>Add something to feel something.</p></div>`;
+      checkoutBtn.disabled = true;
+    } else {
+      cartItems.innerHTML = cart.map((item, i) => `
+        <div class="cart-item">
+          <div class="cart-item-img"><img src="${item.img}" alt=""></div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">$${item.price}</div>
+            <div class="cart-qty">
+              <button onclick="changeQty(${i}, -1)">−</button>
+              <span>${item.qty}</span>
+              <button onclick="changeQty(${i}, 1)">+</button>
+            </div>
+          </div>
+        </div>`).join('');
+      checkoutBtn.disabled = false;
+    }
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    cartTotal.textContent = `$${total}`;
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    cartCount.textContent = count;
+    cartCount.classList.remove('bump');
+    void cartCount.offsetWidth;
+    cartCount.classList.add('bump');
+  }
+
+  window.changeQty = function(idx, delta) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    renderCart();
+  };
+
+  function addToCart(name, price, img) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) existing.qty++;
+    else cart.push({ name, price: parseInt(price), img, qty: 1 });
+    renderCart();
+    showToast(`${name} added to cart`);
+  }
+
+  document.querySelectorAll('.product-add, .kit-cta').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      addToCart(btn.dataset.name, btn.dataset.price, btn.dataset.img);
+      if (btn.classList.contains('product-add')) {
+        btn.classList.add('added');
+        btn.textContent = '✓';
+        setTimeout(() => {
+          btn.classList.remove('added');
+          btn.textContent = '+';
+        }, 800);
+      }
+    });
+  });
+
+  document.getElementById('openCart').addEventListener('click', () => {
+    cartDrawer.classList.add('open');
+    cartOverlay.classList.add('open');
+  });
+  document.getElementById('closeCart').addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+  function closeCart() {
+    cartDrawer.classList.remove('open');
+    cartOverlay.classList.remove('open');
+  }
+  checkoutBtn.addEventListener('click', () => {
+    showToast('Checkout is a demo — but you have great taste 💊');
+  });
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
