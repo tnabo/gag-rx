@@ -1,0 +1,9 @@
+{
+  "name": "gagrx-site",
+  "version": "1.0.0",
+  "description": "GagRx Labs marketing site with Stripe Checkout",
+  "private": true,
+  "dependencies": {
+    "stripe": "^17.0.0"
+  }
+}

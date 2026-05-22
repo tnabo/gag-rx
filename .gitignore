@@ -14,16 +14,19 @@ desktop.ini
 *.log
 npm-debug.log*
 
-# Dependencies (if added later)
+# Dependencies
 node_modules/
 
-# Build output (if added later)
+# Build output
 dist/
 build/
 .next/
 .nuxt/
 
-# Env
+# Vercel
+.vercel
+
+# Env files — NEVER commit these (contains Stripe secret key)
 .env
 .env.local
 .env.*.local
