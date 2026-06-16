@@ -2,10 +2,12 @@
 
 ## What this project is
 
-The **GagRx Labs** marketing + commerce site. A static HTML page with a single serverless function for Stripe Checkout.
+The **GagRx Labs** marketing + commerce site. Static HTML pages with a single serverless function for Stripe Checkout.
 
-- `index.html` — entire site (HTML, CSS, JS all inline)
-- `images/` — product photos + logo
+- `index.html` — homepage (HTML, CSS, JS all inline)
+- `product.html` — single product-detail template; populated client-side from a slug
+- `vercel.json` — rewrites `/products/<slug>` → `/product.html` so each product gets a clean URL
+- `images/` — product photos + logo. Each product has `{slug}.png` (front shot) and `{slug}-detail.png` (full layout)
 - `api/checkout.js` — Vercel serverless function that creates Stripe Checkout sessions
 - `package.json` — declares the `stripe` npm dependency for the serverless function
 - `STRIPE_SETUP.md` — human-facing guide for setting up Stripe + Vercel
@@ -20,21 +22,25 @@ The **GagRx Labs** marketing + commerce site. A static HTML page with a single s
 
 1. **Never commit secrets.** `STRIPE_SECRET_KEY` lives in Vercel environment variables, never in code or git.
 2. **Server is the source of truth for prices.** The `CATALOG` object in `api/checkout.js` defines real prices. The HTML shows display prices but Stripe charges what `CATALOG` says.
-3. **When adding/editing a product, update BOTH places**:
-   - `index.html` — the product card markup (name, displayed price, image, `data-*` attrs)
-   - `api/checkout.js` — the `CATALOG` object (price in cents, description)
-4. **Don't refactor the site to a framework.** It's intentionally a single HTML file. The only "build" step is `npm install` which Vercel handles automatically.
+3. **When adding/editing a product, update THREE places**:
+   - `index.html` — the homepage product card markup (name, displayed price, image, `data-*` attrs, link `href="/products/<slug>"`)
+   - `product.html` — the `PRODUCTS` JS object at the top of the script block (name, brand, tag, cat, price, tone, img, detail, desc, features)
+   - `api/checkout.js` — the `CATALOG` object (price in cents, description) — server is source of truth for prices
+4. **Don't refactor the site to a framework.** It's intentionally a couple of static HTML files. The only "build" step is `npm install` which Vercel handles automatically.
 
 ## Common tasks
 
 ### Add a new product
-1. In `index.html`, copy a `.product-card` block in the carousel section. Update name, price, description, image path, and `data-name`/`data-price`/`data-img` on the `+` button.
-2. In `api/checkout.js`, add an entry to `CATALOG` with the price in cents.
-3. Commit & push. Vercel auto-deploys.
+1. Add two images to `images/`: `{slug}.png` (front bottle shot) and `{slug}-detail.png` (packaging/layout shot).
+2. In `index.html`, copy an `<article class="product-card">` block in the carousel section. Update tone class, slug in `href`, badge, image, category, name, description, price, and the `data-name`/`data-price`/`data-img` on the `+` button.
+3. In `product.html`, add an entry to the `PRODUCTS` object using the slug as the key.
+4. In `api/checkout.js`, add an entry to `CATALOG` keyed by the product `name` with price in cents.
+5. Commit & push. Vercel auto-deploys.
 
 ### Change a price
-1. Update the displayed price in `index.html` (`.product-price` and the `data-price` attribute on the button).
-2. Update the corresponding entry in `CATALOG` in `api/checkout.js` (price in cents — $14 = `1400`).
+1. Update the displayed price in `index.html` (`.product-price` and `data-price` on the `+` button).
+2. Update `price` in the `product.html` `PRODUCTS` entry.
+3. Update the corresponding entry in `CATALOG` in `api/checkout.js` (price in cents — $14 = `1400`).
 
 ### Update shipping rates
 Edit the `shipping_options` array in `api/checkout.js`. Each rate has `display_name`, `fixed_amount.amount` (cents), and `delivery_estimate`.

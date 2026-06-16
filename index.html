@@ -412,6 +412,15 @@
   .product-card.tone-mint { background: var(--mint); }
   .product-card.tone-sky { background: var(--sky); }
   .product-card.tone-peach { background: var(--peach); }
+  .product-card.tone-lilac { background: #e8dcf5; }
+
+  .product-link {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+  }
 
   .product-img {
     height: 280px;
@@ -474,11 +483,6 @@
     margin-bottom: 1.2rem;
     flex: 1;
   }
-  .product-foot {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
   .product-price {
     font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 1.4rem;
@@ -498,6 +502,10 @@
     align-items: center;
     justify-content: center;
     font-family: inherit;
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 2;
   }
   .product-add:hover { background: var(--accent); transform: rotate(90deg) scale(1.1); }
   .product-add.added { background: #2da44e; transform: scale(1.15); }
@@ -1106,10 +1114,9 @@
 <nav>
   <a href="#" class="logo"><img src="images/logo.png" alt="GagRx Labs — Novelty Candy"></a>
   <ul class="nav-links">
-    <li><a href="#shop">Shop</a></li>
-    <li><a href="#kits">Gift Kits</a></li>
-    <li><a href="#how">How It Works</a></li>
-    <li><a href="#faq">FAQ</a></li>
+    <li><a href="/#shop">Shop</a></li>
+    <li><a href="/#how">How It Works</a></li>
+    <li><a href="/#faq">FAQ</a></li>
   </ul>
   <button class="cart-btn" id="openCart">
     Cart <span class="cart-count" id="cartCount">0</span>
@@ -1124,7 +1131,7 @@
       <p class="lead">The gag gift you'll buy this year. Real candy, packaged as fake pharmaceuticals, for problems your insurance refuses to acknowledge.</p>
       <div class="hero-buttons">
         <a href="#shop" class="btn btn-primary">Shop the pharmacy <span class="arrow">→</span></a>
-        <a href="#kits" class="btn btn-ghost">See gift kits</a>
+        <a href="#how" class="btn btn-ghost">How it works</a>
       </div>
     </div>
     <div class="hero-stage" id="heroStage">
@@ -1134,10 +1141,10 @@
         <img src="images/shartismol.png" alt="Shartismol" />
       </div>
       <div class="hero-product-card bg-yellow" data-pos="front" data-idx="1">
-        <img src="images/meetingrofen.png" alt="Meetingrofen" />
+        <img src="images/mondayquil.png" alt="MondayQuil" />
       </div>
       <div class="hero-product-card bg-mint" data-pos="back-right" data-idx="2">
-        <img src="images/distillaxine.png" alt="Distillaxine" />
+        <img src="images/meetingavoidil.png" alt="MeetingAvoidil" />
       </div>
       <div class="hero-nav">
         <button class="hero-dot" data-idx="0" aria-label="Show 1"></button>
@@ -1152,7 +1159,7 @@
   <div class="section-head reveal">
     <h2>The <em>formulary.</em></h2>
     <div style="display:flex; align-items: flex-end; gap: 2rem; flex-wrap: wrap;">
-      <p class="sub">Five flagship products. Real candy. Comically committed packaging. Drag to browse →</p>
+      <p class="sub">Six flagship products. Real candy. Comically committed packaging. Drag to browse →</p>
       <div class="carousel-controls">
         <button class="car-btn" id="prevBtn" aria-label="Previous">←</button>
         <button class="car-btn" id="nextBtn" aria-label="Next">→</button>
@@ -1163,117 +1170,102 @@
   <div class="carousel" id="carousel">
     <div class="carousel-track" id="track">
 
-      <div class="product-card tone-pink">
-        <div class="product-img">
-          <span class="product-badge accent">#1 Bestseller</span>
-          <img src="images/shartismol.png" alt="Shartismol" />
-        </div>
-        <div class="product-info">
-          <div class="product-cat">Gastrointestinal Anxiety</div>
-          <h3 class="product-name">Shartismol®</h3>
-          <p class="product-desc">When you're only 60% sure it's just gas. 50 cinnamon beans.</p>
-          <div class="product-foot">
+      <article class="product-card tone-pink">
+        <a class="product-link" href="/products/shartismol">
+          <div class="product-img">
+            <span class="product-badge accent">#1 Bestseller</span>
+            <img src="images/shartismol.png" alt="Shartismol" />
+          </div>
+          <div class="product-info">
+            <div class="product-cat">False Alarm Relief</div>
+            <h3 class="product-name">Shartismol®</h3>
+            <p class="product-desc">When you're only 60% sure it's just gas. 50 cinnamon beans.</p>
             <div class="product-price">$14</div>
-            <button class="product-add" data-name="Shartismol" data-price="14" data-img="images/shartismol.png">+</button>
           </div>
-        </div>
-      </div>
+        </a>
+        <button class="product-add" data-name="Shartismol" data-price="14" data-img="images/shartismol.png">+</button>
+      </article>
 
-      <div class="product-card tone-sky">
-        <div class="product-img">
-          <span class="product-badge">New</span>
-          <img src="images/meetingrofen.png" alt="Meetingrofen" />
-        </div>
-        <div class="product-info">
-          <div class="product-cat">Calendar Decongestant</div>
-          <h3 class="product-name">Meetingrofen™</h3>
-          <p class="product-desc">For meetings that should've been emails. 50 coated pieces.</p>
-          <div class="product-foot">
-            <div class="product-price">$16</div>
-            <button class="product-add" data-name="Meetingrofen" data-price="16" data-img="images/meetingrofen.png">+</button>
+      <article class="product-card tone-yellow">
+        <a class="product-link" href="/products/forgotitol">
+          <div class="product-img">
+            <span class="product-badge">Extra Memory</span>
+            <img src="images/forgotitol.png" alt="Forgotitol" />
           </div>
-        </div>
-      </div>
-
-      <div class="product-card tone-yellow">
-        <div class="product-img">
-          <img src="images/distillaxine.png" alt="Distillaxine" />
-        </div>
-        <div class="product-info">
-          <div class="product-cat">Emotional Decompression</div>
-          <h3 class="product-name">Distillaxine™</h3>
-          <p class="product-desc">For symptoms of being conscious. 50mL shot glass.</p>
-          <div class="product-foot">
-            <div class="product-price">$12</div>
-            <button class="product-add" data-name="Distillaxine" data-price="12" data-img="images/distillaxine.png">+</button>
+          <div class="product-info">
+            <div class="product-cat">Memory Restorer</div>
+            <h3 class="product-name">Forgotitol®</h3>
+            <p class="product-desc">For the people who forget #2 exists. 50 beans — if you can find the bottle.</p>
+            <div class="product-price">$14</div>
           </div>
-        </div>
-      </div>
+        </a>
+        <button class="product-add" data-name="Forgotitol" data-price="14" data-img="images/forgotitol.png">+</button>
+      </article>
 
-      <div class="product-card tone-mint">
-        <div class="product-img">
-          <span class="product-badge accent">Wild</span>
-          <img src="images/cinnaplasma.png" alt="Cinnaplasma" />
-        </div>
-        <div class="product-info">
-          <div class="product-cat">Emergency Sugar Infusion</div>
-          <h3 class="product-name">Cinnaplasma™</h3>
-          <p class="product-desc">Type FUN+. For acute candy emergencies. 30mL syringe.</p>
-          <div class="product-foot">
-            <div class="product-price">$11</div>
-            <button class="product-add" data-name="Cinnaplasma" data-price="11" data-img="images/cinnaplasma.png">+</button>
+      <article class="product-card tone-mint">
+        <a class="product-link" href="/products/meetingavoidil">
+          <div class="product-img">
+            <span class="product-badge">Office Survival</span>
+            <img src="images/meetingavoidil.png" alt="MeetingAvoidil" />
           </div>
-        </div>
-      </div>
-
-      <div class="product-card tone-peach">
-        <div class="product-img">
-          <span class="product-badge">Bundle</span>
-          <img src="images/kit-tin.png" alt="Get Well Kit" />
-        </div>
-        <div class="product-info">
-          <div class="product-cat">The Full Experience</div>
-          <h3 class="product-name">Get Well Kit</h3>
-          <p class="product-desc">All four flagship products + bandages in a real first-aid tin.</p>
-          <div class="product-foot">
-            <div class="product-price">$48</div>
-            <button class="product-add" data-name="Get Well Kit" data-price="48" data-img="images/kit-tin.png">+</button>
+          <div class="product-info">
+            <div class="product-cat">Schedule-Declining</div>
+            <h3 class="product-name">MeetingAvoidil®</h3>
+            <p class="product-desc">For meetings that should've been emails. 50 coated pieces.</p>
+            <div class="product-price">$14</div>
           </div>
-        </div>
-      </div>
+        </a>
+        <button class="product-add" data-name="MeetingAvoidil" data-price="14" data-img="images/meetingavoidil.png">+</button>
+      </article>
 
-    </div>
-  </div>
-</section>
+      <article class="product-card tone-sky">
+        <a class="product-link" href="/products/mondayquil">
+          <div class="product-img">
+            <span class="product-badge accent">Max Strength</span>
+            <img src="images/mondayquil.png" alt="MondayQuil" />
+          </div>
+          <div class="product-info">
+            <div class="product-cat">Monday Refusal</div>
+            <h3 class="product-name">MondayQuil®</h3>
+            <p class="product-desc">When Mondays hit too hard. Lemon-flavored. 50 beans.</p>
+            <div class="product-price">$14</div>
+          </div>
+        </a>
+        <button class="product-add" data-name="MondayQuil" data-price="14" data-img="images/mondayquil.png">+</button>
+      </article>
 
-<section class="kit-feature" id="kits">
-  <div class="kit-inner">
-    <div class="kit-text reveal">
-      <div class="hero-eyebrow eyebrow">🎁 The bundle</div>
-      <h2>The whole<br><em>pharmacy.</em><br>One tin.</h2>
-      <p>Our flagship gift. Every product, plus the "Boo-Boo-Hoo" feelings bandages, packed in a real first-aid tin. The thing to send when a friend's had a long week — or a long year.</p>
-      <ul class="kit-features">
-        <li>One of every flagship product</li>
-        <li>"Boo-Boo-Hoo" feelings bandages</li>
-        <li>Custom prescription card</li>
-        <li>Real first-aid tin (keep forever)</li>
-      </ul>
-      <div class="kit-price">
-        <span class="now">$48</span>
-        <span class="was">$55</span>
-        <span class="save">Save $7</span>
-      </div>
-      <button class="kit-cta" data-name="Get Well Kit" data-price="48" data-img="images/kit-tin.png">
-        Add the kit to cart →
-      </button>
-    </div>
-    <div class="kit-visual">
-      <div class="kit-photo kit-photo-1">
-        <img src="images/kit-1.png" alt="Get Well Kit contents" />
-      </div>
-      <div class="kit-photo kit-photo-2">
-        <img src="images/kit-tin.png" alt="Get Well Kit tin" />
-      </div>
+      <article class="product-card tone-peach">
+        <a class="product-link" href="/products/newparentavil">
+          <div class="product-img">
+            <span class="product-badge">For Exhausted Parents</span>
+            <img src="images/newparentavil.png" alt="NewParentavil" />
+          </div>
+          <div class="product-info">
+            <div class="product-cat">Parental Survival</div>
+            <h3 class="product-name">NewParentavil®</h3>
+            <p class="product-desc">For when your sanity matters. Sleep loss not included. 50 beans.</p>
+            <div class="product-price">$14</div>
+          </div>
+        </a>
+        <button class="product-add" data-name="NewParentavil" data-price="14" data-img="images/newparentavil.png">+</button>
+      </article>
+
+      <article class="product-card tone-lilac">
+        <a class="product-link" href="/products/oldfartadryl">
+          <div class="product-img">
+            <span class="product-badge">When I Was Their Age</span>
+            <img src="images/oldfartadryl.png" alt="OldFartadryl" />
+          </div>
+          <div class="product-info">
+            <div class="product-cat">Old Fart Syndromes</div>
+            <h3 class="product-name">OldFartadryl®</h3>
+            <p class="product-desc">Fast-acting relief for the symptoms of acute Old Fart Syndromes. 50 beans.</p>
+            <div class="product-price">$14</div>
+          </div>
+        </a>
+        <button class="product-add" data-name="OldFartadryl" data-price="14" data-img="images/oldfartadryl.png">+</button>
+      </article>
+
     </div>
   </div>
 </section>
@@ -1287,7 +1279,7 @@
     <div class="step reveal">
       <div class="step-num">01</div>
       <h3>Pick a prescription</h3>
-      <p>Browse the formulary. Add one product, or grab the full kit. Nothing here will actually cure anything.</p>
+      <p>Browse the formulary. Add a product, or three. Nothing here will actually cure anything.</p>
     </div>
     <div class="step reveal">
       <div class="step-num">02</div>
@@ -1309,24 +1301,24 @@
   </div>
   <div class="reviews-grid">
     <div class="review reveal">
-      <p class="review-text">Sent the Meetingrofen to my manager. She kept the bottle on her desk. My standup got cancelled the next week. Coincidence?</p>
+      <p class="review-text">Sent the MeetingAvoidil to my manager. She kept the bottle on her desk. My standup got cancelled the next week. Coincidence?</p>
       <div class="review-author">
         <div class="review-avatar">DK</div>
         <div><div class="review-name">Dana K.</div><div class="review-role">Software Engineer</div></div>
       </div>
     </div>
     <div class="review reveal">
-      <p class="review-text">My dad turned 65 and refused to acknowledge it. The Get Well Kit broke him. He's now wearing the "Told to Calm Down" bandage in his profile pic.</p>
+      <p class="review-text">My dad turned 65 and refused to acknowledge it. The OldFartadryl broke him. He keeps the bottle next to the remote and calls it his "attitude meds."</p>
       <div class="review-author">
         <div class="review-avatar">MT</div>
         <div><div class="review-name">Marcus T.</div><div class="review-role">Reformed Gift-Giver</div></div>
       </div>
     </div>
     <div class="review reveal">
-      <p class="review-text">Bought the Distillaxine shot glass for my sister's bachelorette. Best gift of the night. Worst gift to read in front of her future mother-in-law.</p>
+      <p class="review-text">Gave the NewParentavil to my sister at her baby shower. She read the bottle, cried, and then immediately tried to take one. From relief, she said.</p>
       <div class="review-author">
         <div class="review-avatar">PR</div>
-        <div><div class="review-name">Priya R.</div><div class="review-role">Maid of Honor (Demoted)</div></div>
+        <div><div class="review-name">Priya R.</div><div class="review-role">Reluctant Auntie</div></div>
       </div>
     </div>
   </div>
@@ -1384,10 +1376,9 @@
     <div class="footer-col">
       <h4>Shop</h4>
       <ul>
-        <li><a href="#">All products</a></li>
-        <li><a href="#">Gift kits</a></li>
-        <li><a href="#">Bestsellers</a></li>
-        <li><a href="#">Wholesale</a></li>
+        <li><a href="/#shop">All products</a></li>
+        <li><a href="/products/shartismol">Bestsellers</a></li>
+        <li><a href="mailto:wholesale@gagrxlabs.com">Wholesale</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -1618,18 +1609,17 @@
     showToast(`${name} added to cart`);
   }
 
-  document.querySelectorAll('.product-add, .kit-cta').forEach(btn => {
+  document.querySelectorAll('.product-add').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       addToCart(btn.dataset.name, btn.dataset.price, btn.dataset.img);
-      if (btn.classList.contains('product-add')) {
-        btn.classList.add('added');
-        btn.textContent = '✓';
-        setTimeout(() => {
-          btn.classList.remove('added');
-          btn.textContent = '+';
-        }, 800);
-      }
+      btn.classList.add('added');
+      btn.textContent = '✓';
+      setTimeout(() => {
+        btn.classList.remove('added');
+        btn.textContent = '+';
+      }, 800);
     });
   });
 

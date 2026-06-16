@@ -9,10 +9,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // Prices are in cents. Keep these in sync with the HTML.
 const CATALOG = {
   'Shartismol':     { price: 1400, description: 'Maximum clench strength · 50 cinnamon beans' },
-  'Meetingrofen':   { price: 1600, description: 'Calendar decongestant · 50 coated pieces' },
-  'Distillaxine':   { price: 1200, description: 'For symptoms of being conscious · 50mL shot glass' },
-  'Cinnaplasma':    { price: 1100, description: 'Type FUN+ · 30mL syringe' },
-  'Get Well Kit':   { price: 4800, description: 'All four products + bandages in a real first-aid tin' },
+  'Forgotitol':     { price: 1400, description: 'Extra memory · 50 beans (if you can find the bottle)' },
+  'MeetingAvoidil': { price: 1400, description: 'Schedule-declining concentrate · 50 coated pieces' },
+  'MondayQuil':     { price: 1400, description: 'Max strength Monday fatigue · 50 lemon beans' },
+  'NewParentavil':  { price: 1400, description: 'For exhausted new parents · 50 beans' },
+  'OldFartadryl':   { price: 1400, description: 'Acute Old Fart Syndrome relief · 50 beans' },
 };
 
 export default async function handler(req, res) {

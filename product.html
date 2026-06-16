@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GagRx Labs™ — Product</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdfaf3;
+    --bg-soft: #f5f0e3;
+    --ink: #1a1a1a;
+    --ink-soft: #555;
+    --muted: #888;
+    --line: #e8e2d0;
+    --accent: #ff4d6d;
+    --accent-soft: #ffe0e6;
+    --yellow: #ffd60a;
+    --mint: #b8e6d9;
+    --sky: #d4e7f7;
+    --peach: #ffd4b8;
+    --lilac: #e8dcf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  .announce {
+    background: var(--ink);
+    color: var(--bg);
+    text-align: center;
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .announce span { color: var(--yellow); font-weight: 600; }
+
+  nav {
+    background: rgba(253, 250, 243, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { display: inline-flex; align-items: center; text-decoration: none; transition: opacity 0.2s; }
+  .logo:hover { opacity: 0.75; }
+  .logo img { height: 56px; width: auto; display: block; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.3rem 0;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .cart-btn {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .cart-btn:hover { background: var(--accent); transform: scale(1.05); }
+  .cart-count {
+    background: var(--accent);
+    color: white;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0 0.4rem;
+  }
+  .cart-btn:hover .cart-count { background: white; color: var(--ink); }
+  .cart-count.bump { animation: bump 0.4s ease; }
+  @keyframes bump {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+  }
+
+  /* PRODUCT DETAIL */
+  .pdp {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+  .crumb {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+  }
+  .crumb a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .crumb a:hover { border-color: var(--ink-soft); }
+  .crumb-sep { margin: 0 0.5rem; color: var(--muted); }
+
+  .pdp-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .pdp-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 6rem;
+  }
+  .pdp-main-img {
+    border-radius: 32px;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .pdp-main-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .pdp-main-img.zoom img { transform: scale(1.4); cursor: zoom-out; }
+  .pdp-thumbs {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .pdp-thumb {
+    flex: 1;
+    aspect-ratio: 1;
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 0.75rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    background: var(--bg-soft);
+    transition: border-color 0.2s;
+  }
+  .pdp-thumb.active { border-color: var(--ink); }
+  .pdp-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .pdp-info { padding-top: 1rem; }
+  .pdp-cat {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+  }
+  .pdp-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .pdp-tag {
+    font-style: italic;
+    color: var(--accent);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  .pdp-price {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .pdp-desc {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+  .pdp-features {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .pdp-features li {
+    padding: 0.4rem 0 0.4rem 1.8rem;
+    position: relative;
+    font-size: 0.95rem;
+  }
+  .pdp-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    width: 22px;
+    height: 22px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .pdp-actions {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .pdp-qty {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .pdp-qty button {
+    background: transparent;
+    border: none;
+    width: 44px;
+    height: 48px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+  }
+  .pdp-qty button:hover { background: var(--bg-soft); }
+  .pdp-qty span {
+    width: 40px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .pdp-add {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 0 2rem;
+    height: 48px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+  }
+  .pdp-add:hover { background: var(--accent); transform: translateY(-2px); }
+  .pdp-add.added { background: #2da44e; }
+  .pdp-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .pdp-meta-row { display: flex; gap: 0.5rem; margin-bottom: 0.3rem; }
+  .pdp-meta-row strong { color: var(--ink); font-weight: 600; }
+
+  /* OTHER PRODUCTS */
+  .other {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+    border-top: 1px solid var(--line);
+  }
+  .other h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .other em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .other-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  .other-card {
+    background: var(--bg-soft);
+    border-radius: 20px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: block;
+  }
+  .other-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+  .other-card.tone-pink { background: var(--accent-soft); }
+  .other-card.tone-yellow { background: #fff4b8; }
+  .other-card.tone-mint { background: var(--mint); }
+  .other-card.tone-sky { background: var(--sky); }
+  .other-card.tone-peach { background: var(--peach); }
+  .other-card.tone-lilac { background: var(--lilac); }
+  .other-img {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.2rem;
+  }
+  .other-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.12));
+  }
+  .other-info {
+    background: white;
+    padding: 1rem 1.2rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .other-name { font-weight: 700; font-size: 1rem; }
+  .other-price { font-weight: 700; color: var(--ink-soft); }
+
+  /* FOOTER (compact) */
+  footer {
+    background: #0f1620;
+    color: var(--bg-soft);
+    padding: 3rem 2rem 2rem;
+  }
+  .footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-brand img { height: 56px; width: auto; filter: brightness(0) invert(1); margin-bottom: 1rem; }
+  .footer-desc { color: #a0aab8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; max-width: 320px; }
+  .footer-addr { color: #6b7480; font-size: 0.8rem; line-height: 1.6; }
+  .footer-col h4 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: white; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 0.5rem; }
+  .footer-col a {
+    color: #a0aab8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: white; }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 1.5rem auto 0;
+    display: flex;
+    justify-content: space-between;
+    color: #6b7480;
+    font-size: 0.8rem;
+  }
+
+  /* CART DRAWER (same as homepage) */
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 200;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: auto; }
+  .cart-drawer {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 420px;
+    max-width: 100vw;
+    background: var(--bg);
+    z-index: 201;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+  }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-head {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cart-head h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.3rem;
+  }
+  .cart-close {
+    background: transparent;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: var(--ink-soft);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+  .cart-close:hover { background: var(--bg-soft); }
+  .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+  }
+  .cart-empty {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--ink-soft);
+  }
+  .cart-empty .emoji { font-size: 3rem; margin-bottom: 1rem; }
+  .cart-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cart-item-img {
+    width: 70px;
+    height: 70px;
+    background: var(--bg-soft);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  .cart-item-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .cart-item-info { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+  .cart-item-name { font-weight: 600; font-size: 0.95rem; }
+  .cart-item-price { color: var(--ink-soft); font-size: 0.85rem; }
+  .cart-qty { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: auto; }
+  .cart-qty button {
+    background: var(--bg-soft);
+    border: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+  }
+  .cart-qty button:hover { background: var(--line); }
+  .cart-foot { padding: 1.5rem; border-top: 1px solid var(--line); }
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+  }
+  .cart-total-amount { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; }
+  .cart-checkout {
+    width: 100%;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s;
+  }
+  .cart-checkout:hover:not(:disabled) { background: var(--accent); }
+  .cart-checkout:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 0.9rem 1.4rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 300;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast .check {
+    background: #2da44e;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 900px) {
+    .pdp-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .pdp-gallery { position: static; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 500px) {
+    .logo img { height: 44px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .cart-drawer { width: 100vw; }
+  }
+</style>
+</head>
+<body>
+
+<div class="announce">
+  ✨ Free shipping over <span>$35</span> · Not real medicine, definitely real candy
+</div>
+
+<nav>
+  <a href="/" class="logo"><img src="images/logo.png" alt="GagRx Labs — Novelty Candy"></a>
+  <ul class="nav-links">
+    <li><a href="/#shop">Shop</a></li>
+    <li><a href="/#how">How It Works</a></li>
+    <li><a href="/#faq">FAQ</a></li>
+  </ul>
+  <button class="cart-btn" id="openCart">
+    Cart <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<main class="pdp">
+  <div class="crumb">
+    <a href="/">Home</a>
+    <span class="crumb-sep">/</span>
+    <a href="/#shop">Formulary</a>
+    <span class="crumb-sep">/</span>
+    <span id="crumbName">Product</span>
+  </div>
+
+  <div class="pdp-grid">
+    <div class="pdp-gallery">
+      <div class="pdp-main-img" id="mainImg">
+        <img id="mainImgEl" src="" alt="" />
+      </div>
+      <div class="pdp-thumbs" id="thumbs"></div>
+    </div>
+
+    <div class="pdp-info">
+      <div class="pdp-cat" id="pdpCat"></div>
+      <h1 class="pdp-name" id="pdpName"></h1>
+      <p class="pdp-tag" id="pdpTag"></p>
+      <div class="pdp-price" id="pdpPrice"></div>
+      <p class="pdp-desc" id="pdpDesc"></p>
+      <ul class="pdp-features" id="pdpFeatures"></ul>
+
+      <div class="pdp-actions">
+        <div class="pdp-qty">
+          <button id="qtyDown" aria-label="Decrease quantity">−</button>
+          <span id="qtyVal">1</span>
+          <button id="qtyUp" aria-label="Increase quantity">+</button>
+        </div>
+        <button class="pdp-add" id="pdpAdd">Add to cart</button>
+      </div>
+
+      <div class="pdp-meta">
+        <div class="pdp-meta-row"><strong>Ships:</strong> 2–5 business days · Free over $35</div>
+        <div class="pdp-meta-row"><strong>Heads up:</strong> Real candy, not real medicine.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section class="other">
+  <h2>More from the <em>formulary.</em></h2>
+  <div class="other-grid" id="otherGrid"></div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="images/logo.png" alt="GagRx Labs"></div>
+      <p class="footer-desc">Candy that thinks it's medicine. Made in Maple Valley, distributed to anyone with a sense of humor.</p>
+      <div class="footer-addr">GagRx Labs Co.<br>Maple Valley, WA 98038<br>hello@gagrxlabs.com</div>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="/#shop">All products</a></li>
+        <li><a href="/products/shartismol">Bestsellers</a></li>
+        <li><a href="mailto:wholesale@gagrxlabs.com">Wholesale</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="/#faq">FAQ</a></li>
+        <li><a href="mailto:hello@gagrxlabs.com">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="/#">About</a></li>
+        <li><a href="/#">Press</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 GagRx Labs Co. · Not real medicine</div>
+    <div>Designed in Maple Valley, WA</div>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>Your prescription</h3>
+    <button class="cart-close" id="closeCart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <div class="emoji">💊</div>
+      <p>No prescriptions yet.<br>Add something to feel something.</p>
+    </div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-total">
+      <span class="cart-total-label">Subtotal</span>
+      <span class="cart-total-amount" id="cartTotal">$0</span>
+    </div>
+    <button class="cart-checkout" id="checkoutBtn" disabled>Checkout</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast">
+  <span class="check">✓</span>
+  <span id="toastText">Added to cart</span>
+</div>
+
+<script>
+  // Product data — keep prices in sync with api/checkout.js CATALOG (server is source of truth)
+  const PRODUCTS = {
+    shartismol: {
+      name: 'Shartismol',
+      brand: 'Shartismol®',
+      tag: 'Maximum clench strength.',
+      cat: 'False Alarm Relief',
+      price: 14,
+      tone: 'pink',
+      img: 'images/shartismol.png',
+      detail: 'images/shartismol-detail.png',
+      desc: 'America\'s #1 brand of choice for false alarm relief. For when you\'re 60% sure it\'s just gas, but the other 40% is filing for emergency leave. Maximum clench strength, four-symptom relief, zero actual medical effect.',
+      features: [
+        '50 cinnamon beans per bottle',
+        '4-symptom false alarm relief',
+        'Real candy, not real medicine',
+        'Comes in extremely convincing packaging',
+      ],
+    },
+    forgotitol: {
+      name: 'Forgotitol',
+      brand: 'Forgotitol®',
+      tag: 'Extra memory. Don\'t forget to take this.',
+      cat: 'Memory Restorer',
+      price: 14,
+      tone: 'yellow',
+      img: 'images/forgotitol.png',
+      detail: 'images/forgotitol-detail.png',
+      desc: 'America\'s #1 brand for people who forget #2 exists. Helps you remember why you walked into the room, the name of that person you\'ve met four times, and where you set the bottle down. 50 beans — if you can find them.',
+      features: [
+        '50 beans per bottle',
+        'Key finder · name reminder · memory restorer',
+        'Real candy, not real medicine',
+        'Warning: do not forget to take this',
+      ],
+    },
+    meetingavoidil: {
+      name: 'MeetingAvoidil',
+      brand: 'MeetingAvoidil®',
+      tag: 'Schedule-declining concentrate.',
+      cat: 'Office Survival',
+      price: 14,
+      tone: 'mint',
+      img: 'images/meetingavoidil.png',
+      detail: 'images/meetingavoidil-detail.png',
+      desc: 'For high-scheduled calendars and the involuntary "maybe Tuesday at 2" reflex. Helps with meeting overload, recurring sync regret, and the dull ache of another all-hands. 50 coated pieces, real candy, zero acceptance required.',
+      features: [
+        '50 coated pieces per box',
+        'Calendaronto concentrated, 200mg of nothing',
+        'Real candy, not real medicine',
+        'Works on Tuesdays AND Thursdays',
+      ],
+    },
+    mondayquil: {
+      name: 'MondayQuil',
+      brand: 'MondayQuil®',
+      tag: 'Max strength serious Monday fatigue.',
+      cat: 'Monday Refusal',
+      price: 14,
+      tone: 'sky',
+      img: 'images/mondayquil.png',
+      detail: 'images/mondayquil-detail.png',
+      desc: 'America\'s #1 brand of choice for Monday refusal. For when the weekend was not enough and the inbox is already at it. Lemon-flavored. Supports caffeine survival and the will to log in.',
+      features: [
+        '50 lemon beans per bottle',
+        'Max strength Monday fatigue support',
+        'Real candy, not real medicine',
+        'Best taken before standup',
+      ],
+    },
+    newparentavil: {
+      name: 'NewParentavil',
+      brand: 'NewParentavil®',
+      tag: 'For when your sanity matters.',
+      cat: 'Parental Survival',
+      price: 14,
+      tone: 'peach',
+      img: 'images/newparentavil.png',
+      detail: 'images/newparentavil-detail.png',
+      desc: 'America\'s #1 brand for parents and recent Stockholm-syndrome sufferers. Helps with sleep loss, partial breakdowns, and baby-induced overwork. Encourages back-arch sighs and supports rapid-onset patience.',
+      features: [
+        '50 beans per bottle',
+        'Sleepybylin 100mg of pure candy',
+        'Real candy, not real medicine',
+        'Pairs nicely with cold coffee',
+      ],
+    },
+    oldfartadryl: {
+      name: 'OldFartadryl',
+      brand: 'OldFartadryl®',
+      tag: '"When I was their age."',
+      cat: 'Old Fart Syndromes',
+      price: 14,
+      tone: 'lilac',
+      img: 'images/oldfartadryl.png',
+      detail: 'images/oldfartadryl-detail.png',
+      desc: 'Fast-acting relief for the symptoms of acute Old Fart Syndromes. Helps with grumbling, eye-rolling, complaints about musicals, and "kids these days" tendencies. Supports daytime story-telling tenancies.',
+      features: [
+        '50 oral candy beans per bottle',
+        'Antifartamine — not for actual flatulence',
+        'Real candy, not real medicine',
+        'Side effects may include unsolicited advice',
+      ],
+    },
+  };
+
+  // Get slug from URL
+  function getSlug() {
+    const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+    const m = path.match(/^products\/(.+)$/);
+    if (m) return m[1].toLowerCase();
+    // Fallback for direct /product.html access
+    const q = new URLSearchParams(window.location.search).get('p');
+    return (q || '').toLowerCase();
+  }
+
+  const slug = getSlug();
+  const product = PRODUCTS[slug];
+
+  if (!product) {
+    document.querySelector('main.pdp').innerHTML = `
+      <div style="text-align:center; padding: 6rem 1rem;">
+        <h1 style="font-family:'Bricolage Grotesque',sans-serif; font-size:2rem; margin-bottom:1rem;">Prescription not found.</h1>
+        <p style="color:var(--ink-soft); margin-bottom:2rem;">That product isn't in the formulary.</p>
+        <a href="/" style="background:var(--ink); color:var(--bg); padding:0.9rem 1.6rem; border-radius:999px; text-decoration:none; font-weight:600;">Back to the pharmacy</a>
+      </div>`;
+    document.querySelector('section.other').remove();
+  } else {
+    // Populate the page
+    document.title = `${product.brand} — GagRx Labs™`;
+    document.getElementById('crumbName').textContent = product.brand;
+    document.getElementById('pdpCat').textContent = product.cat;
+    document.getElementById('pdpName').textContent = product.brand;
+    document.getElementById('pdpTag').textContent = product.tag;
+    document.getElementById('pdpPrice').textContent = `$${product.price}`;
+    document.getElementById('pdpDesc').textContent = product.desc;
+    document.getElementById('pdpFeatures').innerHTML = product.features.map(f => `<li>${f}</li>`).join('');
+
+    const mainImg = document.getElementById('mainImg');
+    const mainImgEl = document.getElementById('mainImgEl');
+    const toneBg = {
+      pink: 'var(--accent-soft)', yellow: '#fff4b8', mint: 'var(--mint)',
+      sky: 'var(--sky)', peach: 'var(--peach)', lilac: 'var(--lilac)',
+    };
+    mainImg.style.background = toneBg[product.tone] || 'var(--bg-soft)';
+    mainImgEl.src = product.img;
+    mainImgEl.alt = product.brand;
+
+    // Thumbnails
+    const thumbs = [product.img, product.detail];
+    const thumbsEl = document.getElementById('thumbs');
+    thumbsEl.innerHTML = thumbs.map((src, i) => `
+      <div class="pdp-thumb ${i === 0 ? 'active' : ''}" data-src="${src}">
+        <img src="${src}" alt="" />
+      </div>`).join('');
+    thumbsEl.querySelectorAll('.pdp-thumb').forEach(t => {
+      t.addEventListener('click', () => {
+        thumbsEl.querySelectorAll('.pdp-thumb').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        mainImgEl.src = t.dataset.src;
+        mainImg.classList.remove('zoom');
+      });
+    });
+
+    // Click-to-zoom on main image
+    mainImg.addEventListener('click', () => mainImg.classList.toggle('zoom'));
+
+    // Quantity + add-to-cart
+    let qty = 1;
+    const qtyVal = document.getElementById('qtyVal');
+    document.getElementById('qtyDown').addEventListener('click', () => {
+      qty = Math.max(1, qty - 1);
+      qtyVal.textContent = qty;
+    });
+    document.getElementById('qtyUp').addEventListener('click', () => {
+      qty = Math.min(99, qty + 1);
+      qtyVal.textContent = qty;
+    });
+
+    const pdpAdd = document.getElementById('pdpAdd');
+    pdpAdd.addEventListener('click', () => {
+      addToCart(product.name, product.price, product.img, qty);
+      pdpAdd.classList.add('added');
+      pdpAdd.textContent = '✓ Added';
+      setTimeout(() => {
+        pdpAdd.classList.remove('added');
+        pdpAdd.textContent = 'Add to cart';
+      }, 1200);
+    });
+
+    // Other products grid
+    const otherGrid = document.getElementById('otherGrid');
+    Object.entries(PRODUCTS)
+      .filter(([s]) => s !== slug)
+      .forEach(([s, p]) => {
+        const card = document.createElement('a');
+        card.className = `other-card tone-${p.tone}`;
+        card.href = `/products/${s}`;
+        card.innerHTML = `
+          <div class="other-img"><img src="${p.img}" alt="${p.brand}" /></div>
+          <div class="other-info">
+            <span class="other-name">${p.brand}</span>
+            <span class="other-price">$${p.price}</span>
+          </div>`;
+        otherGrid.appendChild(card);
+      });
+  }
+
+  // CART (shared with homepage via localStorage)
+  const STORAGE_KEY = 'gagrx_cart_v1';
+  let cart = [];
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) cart = JSON.parse(saved);
+  } catch (e) { cart = []; }
+
+  function saveCart() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); } catch (e) {}
+  }
+
+  const cartCount = document.getElementById('cartCount');
+  const cartItems = document.getElementById('cartItems');
+  const cartTotal = document.getElementById('cartTotal');
+  const cartDrawer = document.getElementById('cartDrawer');
+  const cartOverlay = document.getElementById('cartOverlay');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+
+  function showToast(text) {
+    toastText.textContent = text;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function renderCart() {
+    if (cart.length === 0) {
+      cartItems.innerHTML = `<div class="cart-empty"><div class="emoji">💊</div><p>No prescriptions yet.<br>Add something to feel something.</p></div>`;
+      checkoutBtn.disabled = true;
+    } else {
+      cartItems.innerHTML = cart.map((item, i) => `
+        <div class="cart-item">
+          <div class="cart-item-img"><img src="${item.img}" alt=""></div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">$${item.price}</div>
+            <div class="cart-qty">
+              <button onclick="changeQty(${i}, -1)">−</button>
+              <span>${item.qty}</span>
+              <button onclick="changeQty(${i}, 1)">+</button>
+            </div>
+          </div>
+        </div>`).join('');
+      checkoutBtn.disabled = false;
+    }
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    cartTotal.textContent = `$${total}`;
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    cartCount.textContent = count;
+    cartCount.classList.remove('bump');
+    void cartCount.offsetWidth;
+    cartCount.classList.add('bump');
+  }
+
+  window.changeQty = function(idx, delta) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    saveCart();
+    renderCart();
+  };
+
+  function addToCart(name, price, img, qty = 1) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) existing.qty += qty;
+    else cart.push({ name, price: parseInt(price), img, qty });
+    saveCart();
+    renderCart();
+    showToast(`${name} added to cart`);
+  }
+
+  document.getElementById('openCart').addEventListener('click', () => {
+    cartDrawer.classList.add('open');
+    cartOverlay.classList.add('open');
+  });
+  document.getElementById('closeCart').addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+  function closeCart() {
+    cartDrawer.classList.remove('open');
+    cartOverlay.classList.remove('open');
+  }
+
+  checkoutBtn.addEventListener('click', async () => {
+    if (cart.length === 0) return;
+    const originalText = checkoutBtn.textContent;
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Redirecting to Stripe…';
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.map(i => ({ name: i.name, qty: i.qty, img: i.img })),
+        }),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || 'Checkout failed');
+      }
+      const { url } = await response.json();
+      if (!url) throw new Error('No checkout URL returned');
+      window.location.href = url;
+    } catch (err) {
+      console.error('Checkout error:', err);
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = originalText;
+      showToast(`Checkout error: ${err.message}`);
+    }
+  });
+
+  // Handle return from Stripe Checkout
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('checkout') === 'success') {
+    cart = [];
+    saveCart();
+    renderCart();
+    setTimeout(() => showToast('Order placed — check your email! 💊'), 500);
+    window.history.replaceState({}, '', window.location.pathname);
+  } else if (params.get('checkout') === 'cancelled') {
+    setTimeout(() => showToast('Checkout cancelled — cart saved'), 500);
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+
+  renderCart();
+</script>
+
+</body>
+</html>
