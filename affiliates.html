@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Affiliates — Gag Rx Labs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdfaf3;
+    --bg-soft: #f5f0e3;
+    --ink: #1a1a1a;
+    --ink-soft: #555;
+    --muted: #888;
+    --line: #e8e2d0;
+    --accent: #ff4d6d;
+    --accent-soft: #ffe0e6;
+    --yellow: #ffd60a;
+    --mint: #b8e6d9;
+    --sky: #d4e7f7;
+    --peach: #ffd4b8;
+    --lilac: #e8dcf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  .announce {
+    background: var(--ink);
+    color: var(--bg);
+    text-align: center;
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .announce span { color: var(--yellow); font-weight: 600; }
+
+  nav {
+    background: rgba(253, 250, 243, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { display: inline-flex; align-items: center; text-decoration: none; transition: opacity 0.2s; }
+  .logo:hover { opacity: 0.75; }
+  .logo img { height: 56px; width: auto; display: block; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.3rem 0;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .cart-btn {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .cart-btn:hover { background: var(--accent); transform: scale(1.05); }
+  .cart-count {
+    background: var(--accent);
+    color: white;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0 0.4rem;
+  }
+  .cart-btn:hover .cart-count { background: white; color: var(--ink); }
+  .cart-count.bump { animation: bump 0.4s ease; }
+  @keyframes bump {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+  }
+
+  /* PAGE */
+  .page-hero {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5rem 2rem 3rem;
+    text-align: center;
+  }
+  .page-eyebrow {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .page-hero h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2.6rem, 6vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+  .page-hero h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .page-hero p.lede {
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 680px;
+    margin: 0 auto 2rem;
+  }
+  .page-hero .stats {
+    display: inline-flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat-chip {
+    background: var(--bg-soft);
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+  }
+  .stat-chip strong { color: var(--ink); font-weight: 700; }
+
+  .perks {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 2rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .perk {
+    background: var(--bg-soft);
+    border-radius: 22px;
+    padding: 2rem;
+  }
+  .perk.tone-pink { background: var(--accent-soft); }
+  .perk.tone-yellow { background: #fff4b8; }
+  .perk.tone-mint { background: var(--mint); }
+  .perk-num {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.04em;
+  }
+  .perk h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .perk p { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; }
+
+  .how {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+  .how-head {
+    margin-bottom: 2.5rem;
+  }
+  .how-head h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .how-head h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .how-head p { color: var(--ink-soft); }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  .step {
+    border-top: 2px solid var(--ink);
+    padding-top: 1.2rem;
+  }
+  .step-num {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .step h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+  .step p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.5; }
+
+  /* APPLY FORM */
+  .apply {
+    background: var(--ink);
+    color: var(--bg);
+    margin: 3rem 0;
+    padding: 4rem 2rem;
+  }
+  .apply-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .apply h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+    color: white;
+  }
+  .apply h2 em { color: var(--yellow); font-style: italic; }
+  .apply p.sub {
+    color: #ccc;
+    margin-bottom: 2.5rem;
+    font-size: 1.05rem;
+  }
+  .apply-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    text-align: left;
+  }
+  .apply-form .full { grid-column: 1 / -1; }
+  .apply-form label {
+    display: block;
+    font-size: 0.8rem;
+    color: #aab2bd;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .apply-form input, .apply-form select, .apply-form textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--bg);
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+  }
+  .apply-form input:focus, .apply-form select:focus, .apply-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .apply-form textarea { resize: vertical; min-height: 90px; }
+  .apply-form button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .apply-form button:hover { transform: translateY(-2px); }
+  .apply-form button.sent { background: #2da44e; cursor: default; }
+  .apply-fineprint {
+    font-size: 0.75rem;
+    color: #6b7480;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  /* FAQ */
+  .aff-faq {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 2rem 5rem;
+  }
+  .aff-faq h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  .aff-faq h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .aff-faq details {
+    border-bottom: 1px solid var(--line);
+    padding: 1.2rem 0;
+  }
+  .aff-faq summary {
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+  }
+  .aff-faq summary::-webkit-details-marker { display: none; }
+  .aff-faq summary::after {
+    content: '+';
+    font-size: 1.4rem;
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+  .aff-faq details[open] summary::after { transform: rotate(45deg); }
+  .aff-faq details p {
+    color: var(--ink-soft);
+    margin-top: 0.8rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #0f1620;
+    color: var(--bg-soft);
+    padding: 3rem 2rem 2rem;
+  }
+  .footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-brand {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .footer-brand .brand-mark {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.02em;
+  }
+  .footer-brand .brand-sub {
+    font-size: 0.7rem;
+    color: #aab2bd;
+    letter-spacing: 0.25em;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  .footer-desc { color: #a0aab8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; max-width: 320px; }
+  .footer-addr { color: #6b7480; font-size: 0.8rem; line-height: 1.6; }
+  .footer-col h4 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: white; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 0.5rem; }
+  .footer-col a { color: #a0aab8; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+  .footer-col a:hover { color: white; }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 1.5rem auto 0;
+    display: flex;
+    justify-content: space-between;
+    color: #6b7480;
+    font-size: 0.8rem;
+  }
+
+  /* CART */
+  .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 200; }
+  .cart-overlay.open { opacity: 1; pointer-events: auto; }
+  .cart-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 420px; max-width: 100vw;
+    background: var(--bg); z-index: 201;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; flex-direction: column;
+  }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-head { padding: 1.5rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+  .cart-head h3 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.3rem; }
+  .cart-close { background: transparent; border: none; font-size: 1.4rem; cursor: pointer; color: var(--ink-soft); width: 36px; height: 36px; border-radius: 50%; }
+  .cart-close:hover { background: var(--bg-soft); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+  .cart-empty { text-align: center; padding: 4rem 1rem; color: var(--ink-soft); }
+  .cart-empty .emoji { font-size: 3rem; margin-bottom: 1rem; }
+  .cart-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .cart-item-img { width: 70px; height: 70px; background: var(--bg-soft); border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 0.5rem; }
+  .cart-item-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .cart-item-info { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+  .cart-item-name { font-weight: 600; font-size: 0.95rem; }
+  .cart-item-price { color: var(--ink-soft); font-size: 0.85rem; }
+  .cart-qty { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: auto; }
+  .cart-qty button { background: var(--bg-soft); border: none; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-family: inherit; font-weight: 600; }
+  .cart-qty button:hover { background: var(--line); }
+  .cart-foot { padding: 1.5rem; border-top: 1px solid var(--line); }
+  .cart-total { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 1.05rem; }
+  .cart-total-amount { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; }
+  .cart-checkout { width: 100%; background: var(--ink); color: var(--bg); border: none; padding: 1rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+  .cart-checkout:hover:not(:disabled) { background: var(--accent); }
+  .cart-checkout:disabled { opacity: 0.4; cursor: not-allowed; }
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--ink); color: var(--bg);
+    padding: 0.9rem 1.4rem; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-size: 0.9rem; font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 300;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast .check { background: #2da44e; color: white; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+
+  @media (max-width: 700px) {
+    .nav-links { display: none; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .cart-drawer { width: 100vw; }
+    .apply-form { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="announce">
+  ✨ Free shipping over <span>$35</span> · Not real medicine, definitely real candy
+</div>
+
+<nav>
+  <a href="/" class="logo"><img src="/images/logo.png" alt="GagRx Labs — Novelty Candy"></a>
+  <ul class="nav-links">
+    <li><a href="/#shop">Shop</a></li>
+    <li><a href="/#how">How It Works</a></li>
+    <li><a href="/#faq">FAQ</a></li>
+  </ul>
+  <button class="cart-btn" id="openCart">
+    Cart <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<section class="page-hero">
+  <div class="page-eyebrow">🎥 TikTok Creators</div>
+  <h1>Become a <em>Prescriber.</em></h1>
+  <p class="lede">Our affiliate program for creators with chaotic energy. The packaging does the joke. You point the camera, drop the code, and we take care of the rest.</p>
+  <div class="stats">
+    <span class="stat-chip"><strong>20%</strong> commission per sale</span>
+    <span class="stat-chip"><strong>Free</strong> product to film with</span>
+    <span class="stat-chip"><strong>Custom</strong> discount code for your audience</span>
+  </div>
+</section>
+
+<section class="perks">
+  <div class="perk tone-pink">
+    <div class="perk-num">20%</div>
+    <h3>Commission</h3>
+    <p>You earn 20% on every order placed with your code — for the lifetime of that customer's first purchase cycle. Paid monthly.</p>
+  </div>
+  <div class="perk tone-yellow">
+    <div class="perk-num">📦</div>
+    <h3>Free creator kit</h3>
+    <p>We ship you the entire formulary so you've got real product in hand before you hit record. Unboxing energy not optional.</p>
+  </div>
+  <div class="perk tone-mint">
+    <div class="perk-num">%</div>
+    <h3>Your own code</h3>
+    <p>A personalized discount code (typically 10–15% off) that your audience can use at checkout. Tracks every sale back to you.</p>
+  </div>
+</section>
+
+<section class="how">
+  <div class="how-head">
+    <h2>How it <em>works.</em></h2>
+    <p>From "hey can I apply?" to your first commission check.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01 · APPLY</div>
+      <h3>Tell us about you</h3>
+      <p>One short form. TikTok handle, audience, why this brand fits. We read every one.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02 · APPROVAL</div>
+      <h3>Hear back fast</h3>
+      <p>If we're a fit, we'll email within 3 business days with your code and tracking link.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03 · KIT SHIPS</div>
+      <h3>Get the formulary</h3>
+      <p>Free creator kit lands on your doorstep. Real product, real packaging, real material to film with.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04 · POST</div>
+      <h3>Your content, your style</h3>
+      <p>No mandatory scripts. Just credit @gagrxlabs, drop the code in the caption, and ride the algorithm.</p>
+    </div>
+  </div>
+</section>
+
+<section class="apply" id="apply">
+  <div class="apply-inner">
+    <h2>Apply to be a <em>Prescriber.</em></h2>
+    <p class="sub">Takes two minutes. We respond within 3 business days.</p>
+    <form class="apply-form" id="applyForm">
+      <div>
+        <label for="aff-name">Your name</label>
+        <input type="text" id="aff-name" name="name" required placeholder="Jane Doe">
+      </div>
+      <div>
+        <label for="aff-email">Email</label>
+        <input type="email" id="aff-email" name="email" required placeholder="you@yourdomain.com">
+      </div>
+      <div>
+        <label for="aff-handle">TikTok handle</label>
+        <input type="text" id="aff-handle" name="handle" required placeholder="@yourhandle">
+      </div>
+      <div>
+        <label for="aff-followers">Audience size</label>
+        <select id="aff-followers" name="followers" required>
+          <option value="">Select range</option>
+          <option>Under 5k</option>
+          <option>5k – 25k</option>
+          <option>25k – 100k</option>
+          <option>100k – 500k</option>
+          <option>500k+</option>
+        </select>
+      </div>
+      <div class="full">
+        <label for="aff-pitch">Why's this a good fit?</label>
+        <textarea id="aff-pitch" name="pitch" placeholder="Niche, audience vibe, any past brand work — anything that helps us picture it."></textarea>
+      </div>
+      <div class="full">
+        <button type="submit" id="applyBtn">Send application →</button>
+        <div class="apply-fineprint">Or email us directly: <a href="mailto:affiliates@gagrxlabs.com" style="color: var(--accent); text-decoration: none;">affiliates@gagrxlabs.com</a></div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="aff-faq">
+  <h2>Common <em>questions.</em></h2>
+  <details>
+    <summary>What kind of creators are you looking for?</summary>
+    <p>Comedy, lifestyle, gift-guide, office/work content, parents-of-toddlers chaos, "stuff I'd send my coworker" energy. We're not picky about follower count — we care that the audience matches the vibe.</p>
+  </details>
+  <details>
+    <summary>How do I get paid?</summary>
+    <p>Monthly via PayPal or Stripe Connect, after a 30-day return window has closed on each order. We send a statement on the 1st of every month showing what sold and what's coming.</p>
+  </details>
+  <details>
+    <summary>Do I have to follow a script?</summary>
+    <p>No. The packaging is the joke — we'd rather you film however you'd film any other product. Disclose the partnership per FTC guidelines (we'll send a one-pager) and you're good.</p>
+  </details>
+  <details>
+    <summary>What if I'm not on TikTok?</summary>
+    <p>Reels, Shorts, podcasts, and newsletters all welcome — apply anyway and mention what platform you're on. The program is built around short-form video but we'll consider creators wherever they live.</p>
+  </details>
+  <details>
+    <summary>Can my audience use my code outside the US?</summary>
+    <p>Right now we only ship to the US and Canada, so the code works for orders going to either of those. International expansion is on the roadmap.</p>
+  </details>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <span class="brand-mark">Gag Rx Labs</span>
+        <span class="brand-sub">NOVELTY CANDY</span>
+      </div>
+      <p class="footer-desc">Candy that thinks it's medicine. Distributed to anyone with a sense of humor.</p>
+      <div class="footer-addr">V2M LLC<br>hello@gagrxlabs.com</div>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="/#shop">All products</a></li>
+        <li><a href="/products/shartismol">Bestsellers</a></li>
+        <li><a href="mailto:wholesale@gagrxlabs.com">Wholesale</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="/#faq">Shipping</a></li>
+        <li><a href="mailto:returns@gagrxlabs.com">Returns</a></li>
+        <li><a href="/#faq">FAQ</a></li>
+        <li><a href="mailto:hello@gagrxlabs.com">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="/about">About</a></li>
+        <li><a href="/affiliates">Affiliates</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 V2M LLC · Not real medicine</div>
+    <div>Designed with a straight face</div>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>Your prescription</h3>
+    <button class="cart-close" id="closeCart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <div class="emoji">💊</div>
+      <p>No prescriptions yet.<br>Add something to feel something.</p>
+    </div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-total">
+      <span class="cart-total-label">Subtotal</span>
+      <span class="cart-total-amount" id="cartTotal">$0</span>
+    </div>
+    <button class="cart-checkout" id="checkoutBtn" disabled>Checkout</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast">
+  <span class="check">✓</span>
+  <span id="toastText">Added to cart</span>
+</div>
+
+<script>
+  // APPLY FORM — opens mailto with prefilled subject/body for now
+  document.getElementById('applyForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    const subject = encodeURIComponent(`Affiliate application: ${data.get('handle') || data.get('name')}`);
+    const body = encodeURIComponent(
+      `Name: ${data.get('name')}\n` +
+      `Email: ${data.get('email')}\n` +
+      `TikTok: ${data.get('handle')}\n` +
+      `Audience: ${data.get('followers')}\n\n` +
+      `Why it fits:\n${data.get('pitch') || '(none)'}`
+    );
+    window.location.href = `mailto:affiliates@gagrxlabs.com?subject=${subject}&body=${body}`;
+    const btn = document.getElementById('applyBtn');
+    btn.textContent = '✓ Opening your email…';
+    btn.classList.add('sent');
+  });
+
+  // CART (shared with rest of site via localStorage)
+  const STORAGE_KEY = 'gagrx_cart_v1';
+  let cart = [];
+  try { const saved = localStorage.getItem(STORAGE_KEY); if (saved) cart = JSON.parse(saved); } catch (e) { cart = []; }
+  function saveCart() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); } catch (e) {} }
+
+  const cartCount = document.getElementById('cartCount');
+  const cartItems = document.getElementById('cartItems');
+  const cartTotal = document.getElementById('cartTotal');
+  const cartDrawer = document.getElementById('cartDrawer');
+  const cartOverlay = document.getElementById('cartOverlay');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+
+  function showToast(text) { toastText.textContent = text; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2500); }
+
+  function renderCart() {
+    if (cart.length === 0) {
+      cartItems.innerHTML = `<div class="cart-empty"><div class="emoji">💊</div><p>No prescriptions yet.<br>Add something to feel something.</p></div>`;
+      checkoutBtn.disabled = true;
+    } else {
+      cartItems.innerHTML = cart.map((item, i) => `
+        <div class="cart-item">
+          <div class="cart-item-img"><img src="${item.img}" alt=""></div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">$${item.price}</div>
+            <div class="cart-qty">
+              <button onclick="changeQty(${i}, -1)">−</button>
+              <span>${item.qty}</span>
+              <button onclick="changeQty(${i}, 1)">+</button>
+            </div>
+          </div>
+        </div>`).join('');
+      checkoutBtn.disabled = false;
+    }
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    cartTotal.textContent = `$${total}`;
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    cartCount.textContent = count;
+    cartCount.classList.remove('bump');
+    void cartCount.offsetWidth;
+    cartCount.classList.add('bump');
+  }
+
+  window.changeQty = function(idx, delta) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    saveCart(); renderCart();
+  };
+
+  document.getElementById('openCart').addEventListener('click', () => {
+    cartDrawer.classList.add('open');
+    cartOverlay.classList.add('open');
+  });
+  document.getElementById('closeCart').addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+  function closeCart() { cartDrawer.classList.remove('open'); cartOverlay.classList.remove('open'); }
+
+  checkoutBtn.addEventListener('click', async () => {
+    if (cart.length === 0) return;
+    const originalText = checkoutBtn.textContent;
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Redirecting to Stripe…';
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cart.map(i => ({ name: i.name, qty: i.qty, img: i.img })) }),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || 'Checkout failed');
+      }
+      const { url } = await response.json();
+      if (!url) throw new Error('No checkout URL returned');
+      window.location.href = url;
+    } catch (err) {
+      console.error('Checkout error:', err);
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = originalText;
+      showToast(`Checkout error: ${err.message}`);
+    }
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('checkout') === 'success') {
+    cart = []; saveCart(); renderCart();
+    setTimeout(() => showToast('Order placed — check your email! 💊'), 500);
+    window.history.replaceState({}, '', window.location.pathname);
+  } else if (params.get('checkout') === 'cancelled') {
+    setTimeout(() => showToast('Checkout cancelled — cart saved'), 500);
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+
+  renderCart();
+</script>
+
+</body>
+</html>
