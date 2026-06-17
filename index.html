@@ -860,14 +860,30 @@
   }
   .footer-brand {
     margin-bottom: 1rem;
-    display: block;
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1;
   }
-  .footer-brand img {
-    height: 64px;
-    width: auto;
-    /* Logo has dark navy text — invert it so it reads on dark footer */
-    filter: brightness(0) invert(1);
-    opacity: 0.95;
+  .footer-brand .brand-mark {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.02em;
+  }
+  .footer-brand .brand-mark sup {
+    font-size: 0.55em;
+    font-weight: 500;
+    vertical-align: super;
+    margin-left: 0.15em;
+    color: var(--accent);
+  }
+  .footer-brand .brand-sub {
+    font-size: 0.7rem;
+    color: #aab2bd;
+    letter-spacing: 0.25em;
+    font-weight: 600;
+    margin-top: 0.5rem;
   }
   .footer-desc { color: #999; line-height: 1.6; margin-bottom: 1.5rem; max-width: 320px; }
   .footer-addr { font-size: 0.85rem; color: #777; line-height: 1.7; }
@@ -1369,7 +1385,10 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-brand"><img src="images/logo.png" alt="GagRx Labs"></div>
+      <div class="footer-brand">
+        <span class="brand-mark">Gag Rx Labs<sup>™</sup></span>
+        <span class="brand-sub">NOVELTY CANDY</span>
+      </div>
       <p class="footer-desc">Candy that thinks it's medicine. Made in Maple Valley, distributed to anyone with a sense of humor.</p>
       <div class="footer-addr">GagRx Labs Co.<br>Maple Valley, WA 98038<br>hello@gagrxlabs.com</div>
     </div>
