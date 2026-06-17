@@ -146,6 +146,7 @@
     padding: 2rem;
     overflow: hidden;
     transition: background 0.3s;
+    cursor: zoom-in;
   }
   .pdp-main-img img {
     max-width: 100%;
@@ -153,8 +154,13 @@
     object-fit: contain;
     filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
   }
-  .pdp-main-img.zoom img { transform: scale(1.4); cursor: zoom-out; }
+  .pdp-main-img.zoom { cursor: zoom-out; }
+  .pdp-main-img.zoom img {
+    transform: scale(3);
+    transition: transform 0.2s ease-out;
+  }
   .pdp-thumbs {
     display: flex;
     gap: 0.75rem;
@@ -838,8 +844,18 @@
       });
     });
 
-    // Click-to-zoom on main image
+    // Click to toggle zoom; move mouse to pan around the zoomed image
     mainImg.addEventListener('click', () => mainImg.classList.toggle('zoom'));
+    mainImg.addEventListener('mousemove', (e) => {
+      if (!mainImg.classList.contains('zoom')) return;
+      const rect = mainImg.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      mainImgEl.style.transformOrigin = `${x}% ${y}%`;
+    });
+    mainImg.addEventListener('mouseleave', () => {
+      mainImgEl.style.transformOrigin = 'center center';
+    });
 
     // Quantity + add-to-cart
     let qty = 1;
