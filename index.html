@@ -427,15 +427,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem;
+    padding: 0.5rem;
     position: relative;
     overflow: hidden;
+    background: white;
+    border-bottom: 6px solid var(--line);
   }
+  .product-card.tone-pink   .product-img { border-bottom-color: var(--accent); }
+  .product-card.tone-yellow .product-img { border-bottom-color: var(--yellow); }
+  .product-card.tone-mint   .product-img { border-bottom-color: #7fc9b3; }
+  .product-card.tone-sky    .product-img { border-bottom-color: #7ba7d1; }
+  .product-card.tone-peach  .product-img { border-bottom-color: #ffab7a; }
+  .product-card.tone-lilac  .product-img { border-bottom-color: #b895e0; }
   .product-img img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.12));
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }

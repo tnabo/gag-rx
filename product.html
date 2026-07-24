@@ -143,16 +143,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 0;
     overflow: hidden;
-    transition: background 0.3s;
+    background: white;
+    border: 1px solid var(--line);
     cursor: zoom-in;
   }
   .pdp-main-img img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }
@@ -843,11 +843,6 @@
 
     const mainImg = document.getElementById('mainImg');
     const mainImgEl = document.getElementById('mainImgEl');
-    const toneBg = {
-      pink: 'var(--accent-soft)', yellow: '#fff4b8', mint: 'var(--mint)',
-      sky: 'var(--sky)', peach: 'var(--peach)', lilac: 'var(--lilac)',
-    };
-    mainImg.style.background = toneBg[product.tone] || 'var(--bg-soft)';
     mainImgEl.src = product.img;
     mainImgEl.alt = product.brand;
 
