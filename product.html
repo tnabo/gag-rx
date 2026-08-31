@@ -139,7 +139,7 @@
   }
   .pdp-main-img {
     border-radius: 32px;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -152,7 +152,7 @@
   .pdp-main-img img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }
@@ -162,15 +162,15 @@
     transition: transform 0.2s ease-out;
   }
   .pdp-thumbs {
-    display: flex;
-    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 0.5rem;
   }
   .pdp-thumb {
-    flex: 1;
     aspect-ratio: 1;
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
-    padding: 0.75rem;
+    padding: 0.4rem;
     cursor: pointer;
     border: 2px solid transparent;
     background: var(--bg-soft);
@@ -610,6 +610,7 @@
       <div class="pdp-main-img" id="mainImg">
         <img id="mainImgEl" src="" alt="" />
       </div>
+      <div class="pdp-thumbs" id="thumbs"></div>
     </div>
 
     <div class="pdp-info">
@@ -719,6 +720,7 @@
       price: 14,
       tone: 'pink',
       img: '/images/shartismol.jpg',
+      gallery: ['/images/shartismol.jpg', '/images/shartismol-2.jpg', '/images/shartismol-3.jpg', '/images/shartismol-4.jpg', '/images/shartismol-5.jpg', '/images/shartismol-6.jpg', '/images/shartismol-7.jpg'],
       desc: 'America\'s #1 brand of choice for false alarm relief. For when you\'re 60% sure it\'s just gas, but the other 40% is filing for emergency leave. Maximum clench strength, four-symptom relief, zero actual medical effect.',
       features: [
         '50 cinnamon beans per bottle',
@@ -735,6 +737,7 @@
       price: 14,
       tone: 'yellow',
       img: '/images/forgotitol.jpg',
+      gallery: ['/images/forgotitol.jpg', '/images/forgotitol-2.jpg', '/images/forgotitol-3.jpg', '/images/forgotitol-4.jpg', '/images/forgotitol-5.jpg', '/images/forgotitol-6.jpg', '/images/forgotitol-7.jpg'],
       desc: 'America\'s #1 brand for people who forget #2 exists. Helps you remember why you walked into the room, the name of that person you\'ve met four times, and where you set the bottle down. 50 beans — if you can find them.',
       features: [
         '50 beans per bottle',
@@ -751,6 +754,7 @@
       price: 14,
       tone: 'mint',
       img: '/images/meetingavoidil.jpg',
+      gallery: ['/images/meetingavoidil.jpg', '/images/meetingavoidil-2.jpg', '/images/meetingavoidil-3.jpg', '/images/meetingavoidil-4.jpg', '/images/meetingavoidil-5.jpg', '/images/meetingavoidil-6.jpg', '/images/meetingavoidil-7.jpg', '/images/meetingavoidil-8.jpg'],
       desc: 'For high-scheduled calendars and the involuntary "maybe Tuesday at 2" reflex. Helps with meeting overload, recurring sync regret, and the dull ache of another all-hands. 50 coated pieces, real candy, zero acceptance required.',
       features: [
         '50 coated pieces per box',
@@ -767,6 +771,7 @@
       price: 14,
       tone: 'sky',
       img: '/images/mondayquil.jpg',
+      gallery: ['/images/mondayquil.jpg', '/images/mondayquil-2.jpg', '/images/mondayquil-3.jpg', '/images/mondayquil-4.jpg', '/images/mondayquil-5.jpg', '/images/mondayquil-6.jpg', '/images/mondayquil-7.jpg'],
       desc: 'America\'s #1 brand of choice for Monday refusal. For when the weekend was not enough and the inbox is already at it. Lemon-flavored. Supports caffeine survival and the will to log in.',
       features: [
         '50 lemon beans per bottle',
@@ -783,6 +788,7 @@
       price: 14,
       tone: 'peach',
       img: '/images/newparentavil.jpg',
+      gallery: ['/images/newparentavil.jpg', '/images/newparentavil-2.jpg', '/images/newparentavil-3.jpg', '/images/newparentavil-4.jpg', '/images/newparentavil-5.jpg', '/images/newparentavil-6.jpg', '/images/newparentavil-7.jpg'],
       desc: 'America\'s #1 brand for parents and recent Stockholm-syndrome sufferers. Helps with sleep loss, partial breakdowns, and baby-induced overwork. Encourages back-arch sighs and supports rapid-onset patience.',
       features: [
         '50 beans per bottle',
@@ -799,6 +805,7 @@
       price: 14,
       tone: 'lilac',
       img: '/images/oldfartadryl.jpg',
+      gallery: ['/images/oldfartadryl.jpg', '/images/oldfartadryl-2.jpg', '/images/oldfartadryl-3.jpg', '/images/oldfartadryl-4.jpg', '/images/oldfartadryl-5.jpg', '/images/oldfartadryl-6.jpg', '/images/oldfartadryl-7.jpg'],
       desc: 'Fast-acting relief for the symptoms of acute Old Fart Syndromes. Helps with grumbling, eye-rolling, complaints about musicals, and "kids these days" tendencies. Supports daytime story-telling tenancies.',
       features: [
         '50 oral candy beans per bottle',
@@ -846,6 +853,21 @@
     mainImgEl.src = product.img;
     mainImgEl.alt = product.brand;
 
+    // Thumbnail gallery
+    const gallery = product.gallery && product.gallery.length ? product.gallery : [product.img];
+    const thumbsEl = document.getElementById('thumbs');
+    thumbsEl.innerHTML = gallery.map((src, i) => `
+      <div class="pdp-thumb ${i === 0 ? 'active' : ''}" data-src="${src}">
+        <img src="${src}" alt="" loading="lazy" />
+      </div>`).join('');
+    thumbsEl.querySelectorAll('.pdp-thumb').forEach(t => {
+      t.addEventListener('click', () => {
+        thumbsEl.querySelectorAll('.pdp-thumb').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        mainImgEl.src = t.dataset.src;
+        mainImg.classList.remove('zoom');
+      });
+    });
 
     // Click to toggle zoom; move mouse to pan around the zoomed image
     mainImg.addEventListener('click', () => mainImg.classList.toggle('zoom'));
