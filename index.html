@@ -377,24 +377,14 @@
     max-width: 320px;
   }
 
-  /* CAROUSEL */
-  .carousel {
-    overflow: hidden;
-    cursor: grab;
-    user-select: none;
-    margin: 0 -2rem;
-    padding: 1rem 2rem 2rem;
-  }
-  .carousel.dragging { cursor: grabbing; }
-  .carousel-track {
-    display: flex;
+  /* PRODUCT GRID */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .carousel.dragging .carousel-track { transition: none; }
 
   .product-card {
-    flex: 0 0 320px;
     background: var(--bg-soft);
     border-radius: 24px;
     overflow: hidden;
@@ -1119,7 +1109,7 @@
   }
   @media (max-width: 500px) {
     .logo img { height: 44px; }
-    .product-card { flex: 0 0 280px; }
+    .product-grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; }
     .cta-form { flex-direction: column; border-radius: 16px; padding: 0.8rem; gap: 0.5rem; }
     .cta-form button { padding: 0.9rem; }
@@ -1181,17 +1171,10 @@
 <section class="section" id="shop">
   <div class="section-head reveal">
     <h2>The <em>formulary.</em></h2>
-    <div style="display:flex; align-items: flex-end; gap: 2rem; flex-wrap: wrap;">
-      <p class="sub">Six flagship products. Real candy. Comically committed packaging. Drag to browse →</p>
-      <div class="carousel-controls">
-        <button class="car-btn" id="prevBtn" aria-label="Previous">←</button>
-        <button class="car-btn" id="nextBtn" aria-label="Next">→</button>
-      </div>
-    </div>
+    <p class="sub">Six flagship products. Real candy. Comically committed packaging.</p>
   </div>
 
-  <div class="carousel" id="carousel">
-    <div class="carousel-track" id="track">
+  <div class="product-grid">
 
       <article class="product-card tone-pink">
         <a class="product-link" href="/products/shartismol">
@@ -1289,7 +1272,6 @@
         <button class="product-add" data-name="OldFartadryl" data-price="14" data-img="images/oldfartadryl.jpg">+</button>
       </article>
 
-    </div>
   </div>
 </section>
 
@@ -1498,65 +1480,6 @@
     });
   });
   startHeroTimer();
-
-  // DRAGGABLE CAROUSEL
-  const carousel = document.getElementById('carousel');
-  const track = document.getElementById('track');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  let pos = 0;
-  let isDown = false;
-  let startX = 0;
-  let scrollStart = 0;
-
-  function applyTransform() { track.style.transform = `translateX(${pos}px)`; }
-  function getMaxScroll() { return track.scrollWidth - carousel.clientWidth + 32; }
-  function clampPos() {
-    const max = getMaxScroll();
-    if (pos > 0) pos = 0;
-    if (pos < -max) pos = -max;
-  }
-  function updateButtons() {
-    prevBtn.disabled = pos >= 0;
-    nextBtn.disabled = pos <= -getMaxScroll();
-  }
-
-  prevBtn.addEventListener('click', () => { pos += 340; clampPos(); applyTransform(); updateButtons(); });
-  nextBtn.addEventListener('click', () => { pos -= 340; clampPos(); applyTransform(); updateButtons(); });
-
-  carousel.addEventListener('mousedown', (e) => {
-    if (e.target.closest('button')) return;
-    isDown = true;
-    carousel.classList.add('dragging');
-    startX = e.clientX;
-    scrollStart = pos;
-  });
-  document.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    pos = scrollStart + (e.clientX - startX);
-    clampPos();
-    applyTransform();
-  });
-  document.addEventListener('mouseup', () => {
-    if (!isDown) return;
-    isDown = false;
-    carousel.classList.remove('dragging');
-    updateButtons();
-  });
-  carousel.addEventListener('touchstart', (e) => {
-    isDown = true;
-    startX = e.touches[0].clientX;
-    scrollStart = pos;
-  }, { passive: true });
-  carousel.addEventListener('touchmove', (e) => {
-    if (!isDown) return;
-    pos = scrollStart + (e.touches[0].clientX - startX);
-    clampPos();
-    applyTransform();
-  }, { passive: true });
-  carousel.addEventListener('touchend', () => { isDown = false; updateButtons(); });
-  window.addEventListener('resize', () => { clampPos(); applyTransform(); updateButtons(); });
-  updateButtons();
 
   // CART
   const STORAGE_KEY = 'gagrx_cart_v1';
